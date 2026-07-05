@@ -57,7 +57,7 @@ async function callClaude(prompt: string): Promise<string> {
       "X-Title": "SEO Spark",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.0-flash-001",
+      model: "meta-llama/llama-4-maverick",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
       temperature: 0.7,
@@ -162,7 +162,7 @@ export async function* streamBlogPost(
       "X-Title": "SEO Spark",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.0-flash-001",
+      model: "meta-llama/llama-4-maverick",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
       temperature: 0.7,
