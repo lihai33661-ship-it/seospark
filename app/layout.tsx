@@ -38,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="waffo-verify" content="dc62beb2369b20dfc4071e5d6c3904ec" />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-52BEQLX6D1"
