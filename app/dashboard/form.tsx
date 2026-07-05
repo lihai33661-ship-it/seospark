@@ -208,9 +208,9 @@ export function DashboardForm({
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 flex gap-6">
-        <div className="w-80 shrink-0">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 sticky top-24">
+      <div className="max-w-6xl mx-auto px-4 lg:px-6 py-6 lg:py-8 flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-80 lg:shrink-0">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 lg:sticky lg:top-24">
             <h2 className="font-semibold mb-4">Generate Content</h2>
 
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -286,7 +286,7 @@ export function DashboardForm({
 
         <div className="flex-1 min-w-0">
           {loading && (
-            <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+            <div className="bg-white rounded-xl border border-gray-200 p-8 sm:p-12 text-center">
               <RefreshCw size={32} className="animate-spin mx-auto mb-4 text-blue-500" />
               <p className="text-gray-500">Writing your article...</p>
               <p className="text-sm text-gray-400 mt-1">
@@ -297,18 +297,18 @@ export function DashboardForm({
 
           {result && (
             <div className="space-y-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
+              <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <BarChart3 size={20} />
                   <span className="font-medium">SEO Score</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
                   <span className={`text-2xl font-bold ${getScoreColor(result.seoScore)}`}>
                     {result.seoScore}/100
                   </span>
                   <button
                     onClick={handleCopy}
-                    className="bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center gap-2"
+                    className="bg-gray-100 text-gray-900 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center gap-2"
                   >
                     {copied ? (
                       <>
@@ -325,8 +325,8 @@ export function DashboardForm({
                 </div>
               </div>
 
-              <article className="bg-white rounded-xl border border-gray-200 p-8">
-                <h1 className="text-3xl font-bold mb-6">{result.title}</h1>
+              <article className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 lg:p-8">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">{result.title}</h1>
                 <div
                   className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderContent(result.content) }}
@@ -338,15 +338,15 @@ export function DashboardForm({
                   SEO Metadata
                 </h3>
                 <div className="space-y-2 text-sm">
-                  <div>
+                  <div className="break-words">
                     <span className="text-gray-400">Title: </span>
                     <span className="text-gray-700">{result.seoTitle}</span>
                   </div>
-                  <div>
+                  <div className="break-words">
                     <span className="text-gray-400">Description: </span>
                     <span className="text-gray-700">{result.seoDescription}</span>
                   </div>
-                  <div>
+                  <div className="break-words">
                     <span className="text-gray-400">Slug: </span>
                     <span className="text-gray-700">{result.slug}</span>
                   </div>
@@ -356,7 +356,7 @@ export function DashboardForm({
           )}
 
           {!loading && !result && !error && (
-            <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+            <div className="bg-white rounded-xl border border-gray-200 p-8 sm:p-12 text-center">
               <BarChart3 size={32} className="mx-auto mb-4 text-gray-300" />
               <p className="text-gray-500">Enter a keyword and click Generate</p>
               <p className="text-sm text-gray-400 mt-1">

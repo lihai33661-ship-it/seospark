@@ -4,17 +4,17 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-16 text-center">
         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
           <Sparkles size={16} />
           AI-powered SEO content
         </div>
-        <h1 className="text-5xl font-bold tracking-tight mb-6">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
           Blog posts that rank on Google
           <br />
           <span className="text-blue-600">in 60 seconds</span>
         </h1>
-        <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10">
+        <p className="text-base sm:text-xl text-gray-500 max-w-2xl mx-auto mb-8 sm:mb-10">
           Enter a keyword. Get a complete SEO-optimized blog post — researched, structured, and ready to publish.
         </p>
 
@@ -50,7 +50,7 @@ export default function Home() {
 
       {/* Social Proof */}
       <section className="border-y border-gray-100 py-8">
-        <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
+        <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-4 sm:gap-8 text-center">
           {[
             { n: "60s", l: "Average generation" },
             { n: "SEO Score", l: "Built-in quality check" },
@@ -62,8 +62,8 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">Why businesses use SEO Spark</h2>
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Why businesses use SEO Spark</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { icon: <Sparkles size={24} />, t: "SEO built-in", d: "Keywords, meta tags, headings, readability — all optimized automatically. Each article gets an SEO score." },
@@ -83,9 +83,9 @@ export default function Home() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="bg-gray-50 py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-4">Simple pricing</h2>
+      <section id="pricing" className="bg-gray-50 py-12 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-4">Simple pricing</h2>
           <p className="text-center text-gray-500 mb-12">Start free. Upgrade when you need more.</p>
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
@@ -113,8 +113,8 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="max-w-3xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">Frequently asked</h2>
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Frequently asked</h2>
         {[
           { q: "Can Google tell this is AI-written?", a: "Google has stated they don't penalize AI content — they penalize low-quality content. Our articles are structured for readability, include real data points, and pass standard AI detection checks because they read naturally." },
           { q: "What languages do you support?", a: "English is our primary language. We're optimized for Google.com, .co.uk, .com.au, and other English-language search markets." },

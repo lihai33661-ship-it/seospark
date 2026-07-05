@@ -57,7 +57,7 @@ async function callClaude(prompt: string): Promise<string> {
       "X-Title": "SEO Spark",
     },
     body: JSON.stringify({
-      model: "meta-llama/llama-4-maverick",
+      model: "google/gemini-2.0-flash-001",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
       temperature: 0.7,
