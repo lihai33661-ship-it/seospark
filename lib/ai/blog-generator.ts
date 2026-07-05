@@ -60,7 +60,7 @@ async function callClaude(prompt: string): Promise<string> {
       model: "meta-llama/llama-4-maverick",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
-      temperature: 0.7,
+      temperature: 0.85,
     }),
   });
 
@@ -126,6 +126,9 @@ function calculateSEOScore(input: SEOScoreInput): number {
     "in today's", "fast-paced world", "ever-evolving landscape",
     "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge",
     "leverage", "utilize", "synergize", "robust", "cutting-edge",
+    "harness the power", "dive into", "let's unpack", "game-changing",
+    "paradigm shift", "unleash", "turbocharge", "secret sauce",
+    "double down", "it's not just", "master the art of",
   ];
   const fluffCount = fluffPhrases.filter((p) => bodyLower.includes(p)).length;
   score -= Math.min(fluffCount * 3, 5);
@@ -165,7 +168,7 @@ export async function* streamBlogPost(
       model: "meta-llama/llama-4-maverick",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
-      temperature: 0.7,
+      temperature: 0.85,
       stream: true,
     }),
   });

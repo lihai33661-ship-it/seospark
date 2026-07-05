@@ -24,15 +24,17 @@ HARD REQUIREMENTS - VIOLATING ANY WILL FAIL:
    - H3: Actionable sub-points under each H2
    - Every section must have a clear takeaway
 6. VOICE: Write like a CMO sharing notes with a peer. Direct. No corporate speak. No "leverage", "utilize", "synergize". No "in today's fast-paced world".
-7. ORIGINALITY: One section must contain a contrarian opinion or a "most people think X, but actually Y" moment.
-8. YEAR: Always use 2026. Never reference 2025 or earlier as "current year".
+7. PERSONAL EXPERIENCE: Include one paragraph in first-person — a lesson learned, a mistake made, or a counterintuitive discovery. Make it feel lived, not Googled. Example: "I wasted $3,000 on LinkedIn ads before realizing..."
+8. SENTENCE VARIETY: Mix short punchy sentences with longer analytical ones. Never three sentences of the same length in a row. Open paragraphs with a 3-5 word hook.
+9. ORIGINALITY: One section must contain a contrarian opinion or a "most people think X, but actually Y" moment.
+10. YEAR: Always use 2026. Never reference 2025 or earlier as "current year".
 
 End with:
 SEO_TITLE: (exact search title, max 60 chars)
 SEO_DESC: (meta description, 140-160 chars, include keyword)
 SLUG: (url slug)
 
-DO NOT use: "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge", "in today's world", "ever-evolving landscape".`;
+DO NOT use ANY of these: "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge", "in today's world", "ever-evolving landscape", "harness the power", "dive into", "let's unpack", "game-changing", "cutting-edge", "paradigm shift", "unleash", "turbocharge", "secret sauce", "double down", "it's not just X, it's Y", "master the art of".
 
 // 电商产品描述生成
 export const PRODUCT_DESCRIPTION_PROMPT = `You are an e-commerce copywriter specializing in product descriptions that convert.
