@@ -133,6 +133,108 @@ function calculateSEOScore(input: SEOScoreInput): number {
   return Math.max(0, Math.min(100, Math.round(score)));
 }
 
+export interface StreamEvent {
+  type: "chunk" | "done";
+  content?: string;
+  title?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  slug?: string;
+  seoScore?: number;
+}
+
+export async function* streamBlogPost(
+  request: BlogRequest
+): AsyncGenerator<StreamEvent> {
+  const prompt = BLOG_GENERATION_PROMPT
+    .replace("{{TOPIC}}", request.topic)
+    .replace("{{KEYWORD}}", request.keyword)
+    .replace("{{SECONDARY_KEYWORDS}}", request.secondaryKeywords.join(", ") || "none")
+    .replace("{{AUDIENCE}}", request.audience || "small business owners")
+    .replace("{{TONE}}", request.tone || "professional and direct");
+
+  const res = await fetch(OPENROUTER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENROUTER_KEY}`,
+      "HTTP-Referer": "https://seospark.net",
+      "X-Title": "SEO Spark",
+    },
+    body: JSON.stringify({
+      model: "anthropic/claude-sonnet-4",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 3000,
+      temperature: 0.7,
+      stream: true,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+  }
+
+  let fullText = "";
+  const reader = res.body?.getReader();
+  if (!reader) throw new Error("No response body");
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      const data = line.slice(6);
+      if (data === "[DONE]") continue;
+
+      try {
+        const parsed = JSON.parse(data);
+        const delta = parsed.choices?.[0]?.delta?.content;
+        if (delta) {
+          fullText += delta;
+          yield { type: "chunk", content: delta };
+        }
+      } catch {
+        // skip unparseable lines
+      }
+    }
+  }
+
+  if (!fullText || fullText.length < 200) {
+    throw new Error("AI generation too short. Please try again.");
+  }
+
+  const { content, seoTitle, seoDescription, slug } = parseBlogOutput(fullText);
+  const titleMatch = content.match(/^#\s+(.+)$/m);
+  const title = titleMatch?.[1] || request.topic;
+
+  const seoScore = calculateSEOScore({
+    content,
+    keyword: request.keyword,
+    title,
+    seoTitle,
+    seoDescription,
+  });
+
+  yield {
+    type: "done",
+    title,
+    content: content.replace(/^#\s+.+\n?/, "").trim(),
+    seoTitle: seoTitle || title,
+    seoDescription,
+    slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    seoScore,
+  };
+}
+
 export async function generateBlogPost(
   request: BlogRequest
 ): Promise<BlogResult> {

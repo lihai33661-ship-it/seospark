@@ -142,9 +142,6 @@ export function DashboardForm({
     setResult(null);
     setQuotaExceeded(false);
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 55000);
-
     try {
       const res = await fetch("/api/generate/blog", {
         method: "POST",
@@ -156,10 +153,7 @@ export function DashboardForm({
           audience: "small business owners and marketers",
           tone: "professional and practical",
         }),
-        signal: controller.signal,
       });
-
-      clearTimeout(timeout);
 
       if (res.status === 402) {
         setQuotaExceeded(true);
@@ -167,21 +161,71 @@ export function DashboardForm({
         return;
       }
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Generation failed");
+        let errMsg = "Generation failed";
+        try {
+          const err = await res.json();
+          errMsg = err.error || errMsg;
+        } catch {}
+        throw new Error(errMsg);
       }
 
-      const data = await res.json();
-      setResult(data);
-      if (typeof data.remaining === "number") setRemaining(data.remaining);
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") {
-        setError("Generation timed out. The AI might be busy — please try again.");
-      } else {
-        setError(
-          err instanceof Error ? err.message : "Something went wrong. Try again."
-        );
+      // ===== Streaming reader =====
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response stream");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let streamedContent = "";
+      let streamDone = false;
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const event = JSON.parse(line);
+            if (event.type === "chunk" && event.content) {
+              streamedContent += event.content;
+              setResult({
+                title: "",
+                content: streamedContent,
+                seoTitle: "",
+                seoDescription: "",
+                slug: "",
+                seoScore: 0,
+              });
+            } else if (event.type === "done") {
+              streamDone = true;
+              setResult({
+                title: event.title,
+                content: event.content,
+                seoTitle: event.seoTitle || event.title,
+                seoDescription: event.seoDescription,
+                slug: event.slug,
+                seoScore: event.seoScore,
+              });
+              if (typeof event.remaining === "number") {
+                setRemaining(event.remaining);
+              }
+            } else if (event.type === "error") {
+              throw new Error(event.error);
+            }
+          } catch (parseErr) {
+            if (parseErr instanceof SyntaxError) continue;
+            throw parseErr;
+          }
+        }
       }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Something went wrong. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -285,7 +329,7 @@ export function DashboardForm({
         </div>
 
         <div className="flex-1 min-w-0">
-          {loading && (
+          {loading && !result && (
             <div className="bg-white rounded-xl border border-gray-200 p-8 sm:p-12 text-center">
               <RefreshCw size={32} className="animate-spin mx-auto mb-4 text-blue-500" />
               <p className="text-gray-500">Writing your article...</p>
@@ -297,61 +341,74 @@ export function DashboardForm({
 
           {result && (
             <div className="space-y-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <BarChart3 size={20} />
-                  <span className="font-medium">SEO Score</span>
+              {!loading && result.seoScore > 0 && (
+                <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <BarChart3 size={20} />
+                    <span className="font-medium">SEO Score</span>
+                  </div>
+                  <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                    <span className={`text-2xl font-bold ${getScoreColor(result.seoScore)}`}>
+                      {result.seoScore}/100
+                    </span>
+                    <button
+                      onClick={handleCopy}
+                      className="bg-gray-100 text-gray-900 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center gap-2"
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={16} className="text-green-500" />
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={16} />
+                          Copy Article
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                  <span className={`text-2xl font-bold ${getScoreColor(result.seoScore)}`}>
-                    {result.seoScore}/100
-                  </span>
-                  <button
-                    onClick={handleCopy}
-                    className="bg-gray-100 text-gray-900 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center gap-2"
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={16} className="text-green-500" />
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={16} />
-                        Copy Article
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
+              )}
 
               <article className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 lg:p-8">
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">{result.title}</h1>
+                {result.title && (
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">{result.title}</h1>
+                )}
                 <div
                   className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderContent(result.content) }}
                 />
               </article>
 
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <h3 className="font-semibold mb-3 text-sm text-gray-500 uppercase tracking-wide">
-                  SEO Metadata
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="break-words">
-                    <span className="text-gray-400">Title: </span>
-                    <span className="text-gray-700">{result.seoTitle}</span>
-                  </div>
-                  <div className="break-words">
-                    <span className="text-gray-400">Description: </span>
-                    <span className="text-gray-700">{result.seoDescription}</span>
-                  </div>
-                  <div className="break-words">
-                    <span className="text-gray-400">Slug: </span>
-                    <span className="text-gray-700">{result.slug}</span>
+              {loading && (
+                <div className="flex items-center gap-2 text-sm text-blue-500 px-2">
+                  <RefreshCw size={14} className="animate-spin" />
+                  <span>Writing...</span>
+                </div>
+              )}
+
+              {!loading && result.seoTitle && (
+                <div className="bg-white rounded-xl border border-gray-200 p-4">
+                  <h3 className="font-semibold mb-3 text-sm text-gray-500 uppercase tracking-wide">
+                    SEO Metadata
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="break-words">
+                      <span className="text-gray-400">Title: </span>
+                      <span className="text-gray-700">{result.seoTitle}</span>
+                    </div>
+                    <div className="break-words">
+                      <span className="text-gray-400">Description: </span>
+                      <span className="text-gray-700">{result.seoDescription}</span>
+                    </div>
+                    <div className="break-words">
+                      <span className="text-gray-400">Slug: </span>
+                      <span className="text-gray-700">{result.slug}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

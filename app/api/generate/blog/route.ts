@@ -1,9 +1,10 @@
 /**
  * POST /api/generate/blog
  * 免费额度：3 篇/cookie
+ * 流式响应：NDJSON 格式，逐 token 推送
  */
 import { NextRequest, NextResponse } from "next/server";
-import { generateBlogPost } from "@/lib/ai/blog-generator";
+import { streamBlogPost } from "@/lib/ai/blog-generator";
 
 const FREE_LIMIT = 3;
 
@@ -32,23 +33,51 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const result = await generateBlogPost({
-      topic,
-      keyword,
-      secondaryKeywords: secondaryKeywords || [],
-      audience: audience || "business professionals",
-      tone: tone || "professional",
-    });
-
     const newCount = count + 1;
     const remaining = FREE_LIMIT - newCount;
 
-    const response = NextResponse.json({ ...result, remaining });
-    response.cookies.set("spark_usage", String(newCount), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 365,
+    // Build the streaming response
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          const generator = streamBlogPost({
+            topic,
+            keyword,
+            secondaryKeywords: secondaryKeywords || [],
+            audience: audience || "business professionals",
+            tone: tone || "professional",
+          });
+
+          for await (const event of generator) {
+            const output = event.type === "done"
+              ? { ...event, remaining }
+              : event;
+            const line = JSON.stringify(output) + "\n";
+            controller.enqueue(encoder.encode(line));
+          }
+        } catch (error) {
+          const errorLine =
+            JSON.stringify({
+              type: "error",
+              error:
+                error instanceof Error
+                  ? error.message
+                  : "Generation failed",
+            }) + "\n";
+          controller.enqueue(encoder.encode(errorLine));
+        }
+        controller.close();
+      },
+    });
+
+    const response = new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-cache",
+        "X-Content-Type-Options": "nosniff",
+        "Set-Cookie": `spark_usage=${newCount}; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365}; Path=/`,
+      },
     });
 
     return response;
