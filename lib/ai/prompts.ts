@@ -34,7 +34,7 @@ SEO_TITLE: (exact search title, max 60 chars)
 SEO_DESC: (meta description, 140-160 chars, include keyword)
 SLUG: (url slug)
 
-DO NOT use ANY of these: "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge", "in today's world", "ever-evolving landscape", "harness the power", "dive into", "let's unpack", "game-changing", "cutting-edge", "paradigm shift", "unleash", "turbocharge", "secret sauce", "double down", "it's not just X, it's Y", "master the art of".
+DO NOT use ANY of these: "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge", "in today's world", "ever-evolving landscape", "harness the power", "dive into", "let's unpack", "game-changing", "cutting-edge", "paradigm shift", "unleash", "turbocharge", "secret sauce", "double down", "it's not just X, it's Y", "master the art of".`;
 
 // 电商产品描述生成
 export const PRODUCT_DESCRIPTION_PROMPT = `You are an e-commerce copywriter specializing in product descriptions that convert.
