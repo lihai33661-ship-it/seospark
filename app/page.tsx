@@ -1,24 +1,6 @@
-"use client";
-
-import { useState } from "react";
-import {
-  ArrowRight,
-  CheckCircle,
-  Sparkles,
-  BarChart3,
-  Zap,
-  Globe,
-} from "lucide-react";
+import { Sparkles, BarChart3, Zap, Globe, CheckCircle, ArrowRight } from "lucide-react";
 
 export default function Home() {
-  const [keyword, setKeyword] = useState("");
-  const [topic, setTopic] = useState("");
-
-  const handleTry = () => {
-    const params = new URLSearchParams({ keyword, topic });
-    window.location.href = `/dashboard?${params.toString()}`;
-  };
-
   return (
     <main>
       {/* Hero */}
@@ -33,201 +15,121 @@ export default function Home() {
           <span className="text-blue-600">in 60 seconds</span>
         </h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10">
-          Stop staring at blank pages. Enter a keyword, get a complete
-          SEO-optimized blog post — structured, readable, and ready to publish.
+          Enter a keyword. Get a complete SEO-optimized blog post — researched, structured, and ready to publish.
         </p>
 
-        {/* Quick Try */}
-        <div className="max-w-xl mx-auto bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        {/* Demo GIF */}
+        <div className="max-w-2xl mx-auto mb-10">
+          <img
+            src="/demo.gif"
+            alt="SEO Spark demo - generate a blog post in 60 seconds"
+            className="w-full rounded-xl shadow-lg border border-gray-200"
+          />
+        </div>
+
+        <form action="/dashboard" method="GET" className="max-w-xl mx-auto bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row gap-3 mb-3">
             <input
-              type="text"
-              placeholder="Target keyword, e.g. 'project management tools'"
-              className="input-field flex-1"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+              type="text" name="keyword"
+              placeholder="Target keyword, e.g. project management"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
-              type="text"
+              type="text" name="topic"
               placeholder="Topic (optional)"
-              className="input-field flex-1"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <button
-            onClick={handleTry}
-            className="btn-primary w-full flex items-center justify-center gap-2"
-          >
-            Generate Free Article
-            <ArrowRight size={18} />
+          <button type="submit"
+            className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+            Generate Free Article <ArrowRight size={18} />
           </button>
-          <p className="text-sm text-gray-400 mt-3">
-            No signup required. First 3 articles free.
-          </p>
-        </div>
+          <p className="text-sm text-gray-400 mt-3">3 free articles. No credit card.</p>
+        </form>
       </section>
 
-      {/* Social Proof Bar */}
+      {/* Social Proof */}
       <section className="border-y border-gray-100 py-8">
         <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
           {[
-            { number: "98%", label: "SEO score above 42/60" },
-            { number: "60s", label: "Average generation time" },
-            { number: "3", label: "Free articles, no credit card" },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <div className="text-2xl font-bold text-blue-600">
-                {stat.number}
-              </div>
-              <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
-            </div>
+            { n: "60s", l: "Average generation" },
+            { n: "98%", l: "Pass SEO score check" },
+            { n: "Free", l: "First 3 articles" },
+          ].map((s) => (
+            <div key={s.l}><div className="text-2xl font-bold text-blue-600">{s.n}</div><div className="text-sm text-gray-500 mt-1">{s.l}</div></div>
           ))}
         </div>
       </section>
 
       {/* Features */}
       <section className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          What you get
-        </h2>
-        <div className="grid md:grid-cols-4 gap-8">
+        <h2 className="text-3xl font-bold text-center mb-12">Why businesses use SEO Spark</h2>
+        <div className="grid md:grid-cols-3 gap-8">
           {[
-            {
-              icon: <Sparkles size={24} />,
-              title: "SEO-optimized",
-              desc: "Keywords, meta tags, structure — all baked in. Score each article before publishing.",
-            },
-            {
-              icon: <BarChart3 size={24} />,
-              title: "Readable & human",
-              desc: "Not AI slop. 8th-grade reading level, short paragraphs, actionable advice.",
-            },
-            {
-              icon: <Zap size={24} />,
-              title: "60 seconds flat",
-              desc: "Enter a keyword. Get a draft. Edit. Publish. Same day.",
-            },
-            {
-              icon: <Globe size={24} />,
-              title: "Built for Google",
-              desc: "Follows latest EEAT guidelines. Structured data ready. Mobile-friendly.",
-            },
-          ].map((feature) => (
-            <div key={feature.title} className="text-center">
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mx-auto mb-4">
-                {feature.icon}
-              </div>
-              <h3 className="font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-gray-500">{feature.desc}</p>
+            { icon: <Sparkles size={24} />, t: "SEO built-in", d: "Keywords, meta tags, headings, readability — all optimized automatically. Each article gets an SEO score." },
+            { icon: <BarChart3 size={24} />, t: "Reads like a human", d: "Not AI slop. Real stats, real examples, real company names. Your readers won't know AI touched it." },
+            { icon: <Zap size={24} />, t: "Publish today", d: "Email marketing, project management, SaaS growth — whatever your niche, get a draft in under a minute." },
+            { icon: <Globe size={24} />, t: "Google-ready", d: "EEAT guidelines, mobile-friendly structure, natural keyword placement. Built for 2026 search." },
+            { icon: <CheckCircle size={24} />, t: "No subscription trap", d: "Pay per use or subscribe. Cancel anytime. Your content stays yours." },
+            { icon: <ArrowRight size={24} />, t: "One-click publish", d: "Copy to clipboard, export as Markdown, or push directly to WordPress. No formatting hell." },
+          ].map((f) => (
+            <div key={f.t} className="text-center">
+              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mx-auto mb-4">{f.icon}</div>
+              <h3 className="font-semibold mb-2">{f.t}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{f.d}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="bg-gray-50 py-20">
+      <section id="pricing" className="bg-gray-50 py-20">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-4">
-            Simple pricing
-          </h2>
-          <p className="text-center text-gray-500 mb-12">
-            Start free. Upgrade when you need more.
-          </p>
+          <h2 className="text-3xl font-bold text-center mb-4">Simple pricing</h2>
+          <p className="text-center text-gray-500 mb-12">Start free. Upgrade when you need more.</p>
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
-              {
-                name: "Starter",
-                price: "Free",
-                desc: "3 articles / month",
-                features: [
-                  "Blog post generator",
-                  "SEO scoring",
-                  "Basic templates",
-                  "Email support",
-                ],
-                cta: "Start free",
-                highlight: false,
-              },
-              {
-                name: "Pro",
-                price: "$29",
-                desc: "30 articles / month",
-                features: [
-                  "Everything in Starter",
-                  "Batch generation (5x)",
-                  "Product descriptions",
-                  "Landing page copy",
-                  "Priority support",
-                ],
-                cta: "Get Pro",
-                highlight: true,
-              },
-              {
-                name: "Business",
-                price: "$99",
-                desc: "Unlimited articles",
-                features: [
-                  "Everything in Pro",
-                  "Unlimited generation",
-                  "Custom brand voice",
-                  "Team members (5)",
-                  "API access",
-                ],
-                cta: "Get Business",
-                highlight: false,
-              },
+              { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false },
+              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "Product descriptions", "Landing page copy", "Batch generation", "Priority support"], hl: true },
+              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "Custom brand voice", "Team members (3)", "API access", "WordPress export"], hl: false },
             ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`bg-white rounded-2xl p-6 border-2 ${
-                  plan.highlight
-                    ? "border-blue-600 shadow-lg"
-                    : "border-gray-200"
-                }`}
-              >
-                {plan.highlight && (
-                  <span className="inline-block bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-3">
-                    Most popular
-                  </span>
-                )}
-                <h3 className="text-xl font-bold">{plan.name}</h3>
-                <div className="mt-3 mb-1">
-                  <span className="text-3xl font-bold">{plan.price}</span>
-                  {plan.price !== "Free" && (
-                    <span className="text-gray-500">/month</span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 mb-4">{plan.desc}</p>
+              <div key={plan.n} className={`bg-white rounded-2xl p-6 border-2 ${plan.hl ? "border-blue-600 shadow-lg" : "border-gray-200"}`}>
+                {plan.hl && <span className="inline-block bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-3">Popular</span>}
+                <h3 className="text-xl font-bold">{plan.n}</h3>
+                <div className="mt-3 mb-1"><span className="text-3xl font-bold">{plan.p}</span>{plan.p !== "Free" && <span className="text-gray-500">/mo</span>}</div>
+                <p className="text-sm text-gray-500 mb-4">{plan.d}</p>
                 <ul className="space-y-2 mb-6">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm">
-                      <CheckCircle
-                        size={16}
-                        className="text-green-500 mt-0.5 shrink-0"
-                      />
-                      {f}
-                    </li>
+                  {plan.f.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2 text-sm"><CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />{feat}</li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full py-2.5 rounded-lg font-semibold text-sm ${
-                    plan.highlight
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                  } transition-colors`}
-                >
-                  {plan.cta}
-                </button>
+                <a href="https://paypal.me/seospark151" className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.hl ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}`}>
+                  {plan.p === "Free" ? "Start free" : "Get started"}
+                </a>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="text-center py-8 text-sm text-gray-400">
-        SEO Spark — Built for small businesses that want to be found on Google.
+      {/* FAQ */}
+      <section className="max-w-3xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold text-center mb-12">Frequently asked</h2>
+        {[
+          { q: "Can Google tell this is AI-written?", a: "Google has stated they don't penalize AI content — they penalize low-quality content. Our articles are structured for readability, include real data points, and pass standard AI detection checks because they read naturally." },
+          { q: "What languages do you support?", a: "English is our primary language. We're optimized for Google.com, .co.uk, .com.au, and other English-language search markets." },
+          { q: "Can I edit the articles?", a: "Absolutely. The AI gives you a strong first draft. You can edit, add your expertise, and publish. It saves you the blank-page problem, not replaces your voice." },
+          { q: "Do I own the content?", a: "Yes. All generated content is yours. No attribution required. No rights reserved by us." },
+        ].map((faq) => (
+          <div key={faq.q} className="mb-6">
+            <h3 className="font-semibold mb-2">{faq.q}</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </section>
+
+      <footer className="text-center py-8 text-sm text-gray-400 border-t border-gray-100">
+        &copy; 2026 SEO Spark. Built for small businesses that want to be found.
       </footer>
     </main>
   );

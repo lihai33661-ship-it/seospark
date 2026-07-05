@@ -4,7 +4,9 @@
  */
 
 // 博客文章生成
-export const BLOG_GENERATION_PROMPT = `You are an expert SEO content writer. Write a blog post optimized for Google search.
+export const BLOG_GENERATION_PROMPT = `You are an expert SEO content writer. Today is July 2026. All facts, stats, and references must be accurate for 2026.
+
+Write a high-quality, original blog post.
 
 Topic: {{TOPIC}}
 Target Keyword: {{KEYWORD}}
@@ -12,28 +14,25 @@ Secondary Keywords: {{SECONDARY_KEYWORDS}}
 Target Audience: {{AUDIENCE}}
 Tone: {{TONE}}
 
-Requirements:
-1. Title: Under 60 characters, include the target keyword, compelling and clickable
-2. Meta Description: 140-160 characters, include keyword, make a promise or create curiosity
-3. Introduction: Hook reader in first 100 words. State the problem. Preview the solution.
-4. Structure:
-   - Use H2 for main sections, H3 for subsections
-   - Each H2 section answers one specific question the reader has
-   - Keep paragraphs under 3-4 sentences
-   - Use bullet points for lists and key takeaways
-5. Content Quality:
-   - Every claim backed by specific examples or data
-   - Include at least 3 actionable tips or steps
-   - Naturally use target keyword 3-5 times, secondary keywords 1-2 times each
-   - Write at 8th-grade reading level
-6. Ending: Clear call-to-action, tell reader what to do next
-7. SEO Metadata: Output at the end:
-   SEO_TITLE: (exact title for search)
-   SEO_DESC: (meta description)
-   SLUG: (url-friendly slug from title)
-   KEYWORD_DENSITY: (rough % of target keyword)
+HARD REQUIREMENTS - VIOLATING ANY WILL FAIL:
+1. LENGTH: Minimum 800 words. No fluff — every paragraph must say something.
+2. TITLE: Use this exact format — a how-to or numbered list title under 60 chars. Make it specific. NOT generic like "Guide to X" or "What is X".
+3. STATS: Include at least 3 real statistics with specific numbers and sources (e.g. "According to HubSpot's 2026 State of Marketing report..."). If you don't know the exact stat, DON'T make one up — instead use a concrete example with a real company name.
+4. EXAMPLES: Include 2-3 specific company/product examples by name. Real companies. Not "a SaaS company" — name them.
+5. STRUCTURE:
+   - H2: Must be QUESTIONS your reader is actually asking
+   - H3: Actionable sub-points under each H2
+   - Every section must have a clear takeaway
+6. VOICE: Write like a CMO sharing notes with a peer. Direct. No corporate speak. No "leverage", "utilize", "synergize". No "in today's fast-paced world".
+7. ORIGINALITY: One section must contain a contrarian opinion or a "most people think X, but actually Y" moment.
+8. YEAR: Always use 2026. Never reference 2025 or earlier as "current year".
 
-Important: Do NOT use generic AI phrases like "in today's fast-paced world", "unlock your potential", or "revolutionize". Write like a knowledgeable human expert sharing practical advice.`;
+End with:
+SEO_TITLE: (exact search title, max 60 chars)
+SEO_DESC: (meta description, 140-160 chars, include keyword)
+SLUG: (url slug)
+
+DO NOT use: "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge", "in today's world", "ever-evolving landscape".`;
 
 // 电商产品描述生成
 export const PRODUCT_DESCRIPTION_PROMPT = `You are an e-commerce copywriter specializing in product descriptions that convert.

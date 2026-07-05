@@ -1,14 +1,11 @@
 /**
  * 博客文章生成器
- * 调用 DeepSeek API（Anthropic 兼容接口）生成 SEO 优化的博客文章
+ * OpenRouter API → Claude Sonnet
  */
-import Anthropic from "@anthropic-ai/sdk";
-import { BLOG_GENERATION_PROMPT, SEO_ANALYSIS_PROMPT } from "./prompts";
+import { BLOG_GENERATION_PROMPT } from "./prompts";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.DEEPSEEK_API_KEY || "",
-  baseURL: "https://api.deepseek.com/anthropic",
-});
+const OPENROUTER_KEY = process.env.DEEPSEEK_API_KEY || "";
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 interface BlogRequest {
   topic: string;
@@ -27,9 +24,6 @@ interface BlogResult {
   seoScore: number;
 }
 
-/**
- * 解析 AI 原始输出，提取各部分
- */
 function parseBlogOutput(raw: string): {
   content: string;
   seoTitle: string;
@@ -42,11 +36,9 @@ function parseBlogOutput(raw: string): {
     .replace(/^SLUG:.*$/gm, "")
     .replace(/^KEYWORD_DENSITY:.*$/gm, "")
     .trim();
-
   const seoTitleMatch = raw.match(/^SEO_TITLE:\s*(.+)$/m);
   const seoDescMatch = raw.match(/^SEO_DESC:\s*(.+)$/m);
   const slugMatch = raw.match(/^SLUG:\s*(.+)$/m);
-
   return {
     content,
     seoTitle: seoTitleMatch?.[1]?.trim() || "",
@@ -55,78 +47,126 @@ function parseBlogOutput(raw: string): {
   };
 }
 
-/**
- * 生成博客文章
- */
+async function callClaude(prompt: string): Promise<string> {
+  const res = await fetch(OPENROUTER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENROUTER_KEY}`,
+      "HTTP-Referer": "https://seospark.net",
+      "X-Title": "SEO Spark",
+    },
+    body: JSON.stringify({
+      model: "meta-llama/llama-4-maverick",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 3000,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || "";
+}
+
+interface SEOScoreInput {
+  content: string;
+  keyword: string;
+  title: string;
+  seoTitle: string;
+  seoDescription: string;
+}
+
+function calculateSEOScore(input: SEOScoreInput): number {
+  const { content, keyword, title, seoTitle, seoDescription } = input;
+  const keywordLower = keyword.toLowerCase();
+  const bodyLower = content.toLowerCase();
+  const wordCount = content.split(/\s+/).length;
+  const sentences = content.split(/[.!?]+/).filter(Boolean);
+
+  // 1. Keyword in title (20%)
+  let score = 0;
+  if (title.toLowerCase().includes(keywordLower)) score += 20;
+
+  // 2. Keyword in first 100 words (15%)
+  const first100 = bodyLower.split(/\s+/).slice(0, 100).join(" ");
+  if (first100.includes(keywordLower)) score += 15;
+
+  // 3. Content length — 800+ words (15%)
+  if (wordCount >= 800) score += 15;
+  else if (wordCount >= 500) score += 8;
+
+  // 4. Heading structure — has H2s (15%)
+  const h2Count = (content.match(/^##\s/gm) || []).length;
+  if (h2Count >= 4) score += 15;
+  else if (h2Count >= 2) score += 8;
+  else if (h2Count >= 1) score += 4;
+
+  // 5. Readability — avg sentence length (10%)
+  const avgWordsPerSentence = wordCount / Math.max(sentences.length, 1);
+  if (avgWordsPerSentence <= 20) score += 10;
+  else if (avgWordsPerSentence <= 25) score += 5;
+
+  // 6. Meta completeness (10%)
+  if (seoTitle.length >= 20 && seoTitle.length <= 60) score += 5;
+  if (seoDescription.length >= 50 && seoDescription.length <= 160) score += 5;
+
+  // 7. Keyword density 1-3% (10%)
+  const keywordOccurrences = (bodyLower.match(new RegExp(keywordLower.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length;
+  const density = (keywordOccurrences / Math.max(wordCount, 1)) * 100;
+  if (density >= 1 && density <= 3) score += 10;
+  else if (density > 0.5 && density < 5) score += 5;
+
+  // 8. AI fluff detector — penalty (up to -5)
+  const fluffPhrases = [
+    "in today's", "fast-paced world", "ever-evolving landscape",
+    "unlock", "revolutionize", "game-changer", "skyrocket", "supercharge",
+    "leverage", "utilize", "synergize", "robust", "cutting-edge",
+  ];
+  const fluffCount = fluffPhrases.filter((p) => bodyLower.includes(p)).length;
+  score -= Math.min(fluffCount * 3, 5);
+
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
 export async function generateBlogPost(
   request: BlogRequest
 ): Promise<BlogResult> {
-  const prompt = BLOG_GENERATION_PROMPT.replace("{{TOPIC}}", request.topic)
+  const prompt = BLOG_GENERATION_PROMPT
+    .replace("{{TOPIC}}", request.topic)
     .replace("{{KEYWORD}}", request.keyword)
-    .replace(
-      "{{SECONDARY_KEYWORDS}}",
-      request.secondaryKeywords.join(", ") || "none"
-    )
-    .replace("{{AUDIENCE}}", request.audience || "general business audience")
-    .replace("{{TONE}}", request.tone || "professional and helpful");
+    .replace("{{SECONDARY_KEYWORDS}}", request.secondaryKeywords.join(", ") || "none")
+    .replace("{{AUDIENCE}}", request.audience || "small business owners")
+    .replace("{{TONE}}", request.tone || "professional and direct");
 
-  const response = await anthropic.messages.create({
-    model: "deepseek-v4-pro",
-    max_tokens: 4096,
-    messages: [{ role: "user", content: prompt }],
-  });
+  const rawOutput = await callClaude(prompt);
 
-  // DeepSeek 返回可能夹 thinking 块，找 text 类型的 content
-  const textBlock = response.content.find((c) => c.type === "text");
-  const rawOutput = textBlock?.type === "text" ? textBlock.text : "";
-
-  if (!rawOutput) {
-    throw new Error("AI 生成失败，返回为空");
+  if (!rawOutput || rawOutput.length < 200) {
+    throw new Error("AI generation too short. Please try again.");
   }
 
   const { content, seoTitle, seoDescription, slug } = parseBlogOutput(rawOutput);
-
-  // 提取标题（第一个 # 标题）
   const titleMatch = content.match(/^#\s+(.+)$/m);
   const title = titleMatch?.[1] || request.topic;
 
-  // SEO 评分
-  const seoScore = await analyzeSEO(content, request.keyword);
+  const seoScore = calculateSEOScore({
+    content,
+    keyword: request.keyword,
+    title,
+    seoTitle,
+    seoDescription,
+  });
 
   return {
     title,
-    content: content.replace(/^#\s+.+\n?/, "").trim(), // 去掉已提取的标题
+    content: content.replace(/^#\s+.+\n?/, "").trim(),
     seoTitle: seoTitle || title,
     seoDescription,
     slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
     seoScore,
   };
-}
-
-/**
- * SEO 评分
- */
-async function analyzeSEO(content: string, keyword: string): Promise<number> {
-  try {
-    const prompt = SEO_ANALYSIS_PROMPT.replace("{{CONTENT}}", content).replace(
-      "{{KEYWORD}}",
-      keyword
-    );
-
-    const response = await anthropic.messages.create({
-      model: "deepseek-v4-flash",
-      max_tokens: 1024,
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const textBlock = response.content.find((c) => c.type === "text");
-    const text = textBlock?.type === "text" ? textBlock.text : "";
-
-    const totalMatch = text.match(/TOTAL:\s*(\d+)/);
-    const score = totalMatch ? parseInt(totalMatch[1]) : 35;
-
-    return Math.min(score, 100);
-  } catch {
-    return 35; // 默认中等分
-  }
 }

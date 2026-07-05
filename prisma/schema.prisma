@@ -7,23 +7,12 @@ datasource db {
   url      = "file:./seospark.db"
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  contents  Content[]
-}
-
 model Content {
   id        String   @id @default(cuid())
-  userId    String
+  sessionId String
   title     String
   keywords  String
   body      String
-  seoScore  Int?
-  type      String   @default("blog") // blog, product, landing
+  type      String   @default("blog")
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
 }

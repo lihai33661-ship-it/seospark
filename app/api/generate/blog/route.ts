@@ -1,9 +1,16 @@
 /**
  * POST /api/generate/blog
- * 生成 SEO 博客文章
+ * 免费额度：3 篇/cookie
  */
 import { NextRequest, NextResponse } from "next/server";
 import { generateBlogPost } from "@/lib/ai/blog-generator";
+
+const FREE_LIMIT = 3;
+
+function readCount(req: NextRequest): number {
+  const raw = req.cookies.get("spark_usage")?.value;
+  return raw ? parseInt(raw) || 0 : 0;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,6 +24,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const count = readCount(req);
+    if (count >= FREE_LIMIT) {
+      return NextResponse.json(
+        { error: "Free limit reached. Upgrade to Pro.", quotaExceeded: true },
+        { status: 402 }
+      );
+    }
+
     const result = await generateBlogPost({
       topic,
       keyword,
@@ -25,7 +40,18 @@ export async function POST(req: NextRequest) {
       tone: tone || "professional",
     });
 
-    return NextResponse.json(result);
+    const newCount = count + 1;
+    const remaining = FREE_LIMIT - newCount;
+
+    const response = NextResponse.json({ ...result, remaining });
+    response.cookies.set("spark_usage", String(newCount), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+
+    return response;
   } catch (error) {
     console.error("Generation error:", error);
     return NextResponse.json(
