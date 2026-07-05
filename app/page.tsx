@@ -10,12 +10,13 @@ export default function Home() {
           AI-powered SEO content
         </div>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
-          Blog posts that rank on Google
+          SEO blog posts
           <br />
-          <span className="text-blue-600">in 60 seconds</span>
+          <span className="text-blue-600">you&apos;re not afraid to publish</span>
         </h1>
         <p className="text-base sm:text-xl text-gray-500 max-w-2xl mx-auto mb-8 sm:mb-10">
-          Enter a keyword. Get a complete SEO-optimized blog post — researched, structured, and ready to publish.
+          Free AI writes like a machine. SEO Spark writes like a marketer — real company names,
+          real stats, built-in SEO score. One keyword in, one copy-click out. Publish with confidence.
         </p>
 
         {/* Demo GIF */}
@@ -46,6 +47,23 @@ export default function Home() {
           </button>
           <p className="text-sm text-gray-400 mt-3">3 free articles. No credit card.</p>
         </form>
+      </section>
+
+      {/* How it works — 3 steps */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-12 text-center">
+        <div className="grid grid-cols-3 gap-6">
+          {[
+            { step: "1", t: "Enter keyword", d: "The topic your customers are searching for" },
+            { step: "2", t: "Generate", d: "60 seconds, you get a scored, publishable draft" },
+            { step: "3", t: "Copy & publish", d: "Paste into WordPress, Shopify, Medium — done" },
+          ].map((s) => (
+            <div key={s.step}>
+              <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-sm">{s.step}</div>
+              <h3 className="font-semibold text-sm mb-1">{s.t}</h3>
+              <p className="text-xs text-gray-400 leading-relaxed">{s.d}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Social Proof */}
