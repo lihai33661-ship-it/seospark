@@ -143,7 +143,7 @@ export function DashboardForm({
     setQuotaExceeded(false);
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 28000);
+    const timeout = setTimeout(() => controller.abort(), 55000);
 
     try {
       const res = await fetch("/api/generate/blog", {
