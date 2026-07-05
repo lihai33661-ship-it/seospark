@@ -4,7 +4,7 @@
  */
 import { BLOG_GENERATION_PROMPT } from "./prompts";
 
-const OPENROUTER_KEY = process.env.DEEPSEEK_API_KEY || "";
+const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 interface BlogRequest {

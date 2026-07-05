@@ -26,10 +26,94 @@ function getScoreColor(score: number) {
 }
 
 function renderContent(text: string): string {
+  let html = "";
+  const lines = text.split("\n");
+  let inList = false;
+  let inOrderedList = false;
+  let i = 0;
+
+  while (i < lines.length) {
+    let line = lines[i];
+
+    // Blank line: close any open list, skip
+    if (!line.trim()) {
+      if (inList) { html += "</ul>"; inList = false; }
+      if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+      i++;
+      continue;
+    }
+
+    // Headings
+    const h3Match = line.match(/^###\s+(.+)/);
+    const h2Match = line.match(/^##\s+(.+)/);
+    const h1Match = line.match(/^#\s+(.+)/);
+    if (h3Match) {
+      if (inList) { html += "</ul>"; inList = false; }
+      if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+      html += `<h3 class="text-lg font-semibold mt-6 mb-2">${inlineFormat(h3Match[1])}</h3>`;
+      i++; continue;
+    }
+    if (h2Match) {
+      if (inList) { html += "</ul>"; inList = false; }
+      if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+      html += `<h2 class="text-xl font-bold mt-8 mb-3">${inlineFormat(h2Match[1])}</h2>`;
+      i++; continue;
+    }
+    if (h1Match) {
+      if (inList) { html += "</ul>"; inList = false; }
+      if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+      html += `<h1 class="text-2xl font-bold mt-6 mb-4">${inlineFormat(h1Match[1])}</h1>`;
+      i++; continue;
+    }
+
+    // Unordered list
+    const ulMatch = line.match(/^[\-\*]\s+(.+)/);
+    if (ulMatch) {
+      if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+      if (!inList) { html += "<ul class=\"list-disc pl-5 space-y-1 mb-3\">"; inList = true; }
+      html += `<li class="leading-relaxed">${inlineFormat(ulMatch[1])}</li>`;
+      i++; continue;
+    }
+
+    // Ordered list
+    const olMatch = line.match(/^\d+[\.\)]\s+(.+)/);
+    if (olMatch) {
+      if (inList) { html += "</ul>"; inList = false; }
+      if (!inOrderedList) { html += "<ol class=\"list-decimal pl-5 space-y-1 mb-3\">"; inOrderedList = true; }
+      html += `<li class="leading-relaxed">${inlineFormat(olMatch[1])}</li>`;
+      i++; continue;
+    }
+
+    // Regular paragraph
+    if (inList) { html += "</ul>"; inList = false; }
+    if (inOrderedList) { html += "</ol>"; inOrderedList = false; }
+
+    // Collect consecutive non-blank, non-special lines into one paragraph
+    let para = line;
+    i++;
+    while (i < lines.length && lines[i].trim() &&
+           !lines[i].match(/^#{1,3}\s/) &&
+           !lines[i].match(/^[\-\*]\s/) &&
+           !lines[i].match(/^\d+[\.\)]\s/)) {
+      para += " " + lines[i].trim();
+      i++;
+    }
+    if (para.trim()) {
+      html += `<p class="mb-3 leading-relaxed">${inlineFormat(para)}</p>`;
+    }
+  }
+
+  if (inList) { html += "</ul>"; }
+  if (inOrderedList) { html += "</ol>"; }
+
+  return html || "<p class=\"text-gray-400\">No content generated.</p>";
+}
+
+function inlineFormat(text: string): string {
   return text
-    .split("\n\n")
-    .map((p) => `<p class="mb-3 leading-relaxed">${p.replace(/\n/g, "<br/>")}</p>`)
-    .join("");
+    .replace(/\*\*(.+?)\*\*/g, "<strong class=\"font-semibold\">$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/`(.+?)`/g, "<code class=\"bg-gray-100 px-1 rounded text-sm\">$1</code>");
 }
 
 export function DashboardForm({
@@ -56,6 +140,10 @@ export function DashboardForm({
     setError("");
     setLoading(true);
     setResult(null);
+    setQuotaExceeded(false);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
 
     try {
       const res = await fetch("/api/generate/blog", {
@@ -68,7 +156,10 @@ export function DashboardForm({
           audience: "small business owners and marketers",
           tone: "professional and practical",
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeout);
 
       if (res.status === 402) {
         setQuotaExceeded(true);
@@ -84,9 +175,13 @@ export function DashboardForm({
       setResult(data);
       if (typeof data.remaining === "number") setRemaining(data.remaining);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Something went wrong. Try again."
-      );
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setError("Generation timed out. The AI might be busy — please try again.");
+      } else {
+        setError(
+          err instanceof Error ? err.message : "Something went wrong. Try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -161,7 +256,15 @@ export function DashboardForm({
             </button>
 
             {error && (
-              <p className="text-sm text-red-500 mt-3 text-center">{error}</p>
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700 mb-2">{error}</p>
+                <button
+                  onClick={handleGenerate}
+                  className="text-sm text-red-600 underline hover:text-red-800"
+                >
+                  Try again →
+                </button>
+              </div>
             )}
 
             {remaining !== null && (

@@ -53,7 +53,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
           {[
             { n: "60s", l: "Average generation" },
-            { n: "98%", l: "Pass SEO score check" },
+            { n: "SEO Score", l: "Built-in quality check" },
             { n: "Free", l: "First 3 articles" },
           ].map((s) => (
             <div key={s.l}><div className="text-2xl font-bold text-blue-600">{s.n}</div><div className="text-sm text-gray-500 mt-1">{s.l}</div></div>
@@ -70,8 +70,8 @@ export default function Home() {
             { icon: <BarChart3 size={24} />, t: "Reads like a human", d: "Not AI slop. Real stats, real examples, real company names. Your readers won't know AI touched it." },
             { icon: <Zap size={24} />, t: "Publish today", d: "Email marketing, project management, SaaS growth — whatever your niche, get a draft in under a minute." },
             { icon: <Globe size={24} />, t: "Google-ready", d: "EEAT guidelines, mobile-friendly structure, natural keyword placement. Built for 2026 search." },
-            { icon: <CheckCircle size={24} />, t: "No subscription trap", d: "Pay per use or subscribe. Cancel anytime. Your content stays yours." },
-            { icon: <ArrowRight size={24} />, t: "One-click publish", d: "Copy to clipboard, export as Markdown, or push directly to WordPress. No formatting hell." },
+            { icon: <CheckCircle size={24} />, t: "No subscription trap", d: "3 free articles. No credit card. Upgrade only if it works for you. Cancel anytime." },
+            { icon: <ArrowRight size={24} />, t: "Copy & publish", d: "One-click copy to clipboard. Paste into WordPress, Medium, Ghost — wherever you publish." },
           ].map((f) => (
             <div key={f.t} className="text-center">
               <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mx-auto mb-4">{f.icon}</div>
@@ -90,8 +90,8 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
               { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false },
-              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "Product descriptions", "Landing page copy", "Batch generation", "Priority support"], hl: true },
-              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "Custom brand voice", "Team members (3)", "API access", "WordPress export"], hl: false },
+              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true },
+              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "100 articles per month", "Custom brand voice (coming soon)", "Bulk generation (coming soon)", "API access (coming soon)"], hl: false },
             ].map((plan) => (
               <div key={plan.n} className={`bg-white rounded-2xl p-6 border-2 ${plan.hl ? "border-blue-600 shadow-lg" : "border-gray-200"}`}>
                 {plan.hl && <span className="inline-block bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-3">Popular</span>}
