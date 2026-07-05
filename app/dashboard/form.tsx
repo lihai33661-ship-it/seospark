@@ -376,11 +376,11 @@ export function DashboardForm({
                   <>
                     <p className="text-xs text-green-600 mb-3">Got it! Choose your plan:</p>
                     <div className="space-y-2">
-                      <a href="https://paypal.me/seospark151/19" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
-                        Pro — $19/month
+                      <a href="https://paypal.me/seospark151/9" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                        Pro — $9 first month (launch)
                       </a>
-                      <a href="https://paypal.me/seospark151/49" className="block w-full bg-gray-100 text-gray-900 text-sm px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-                        Business — $49/month
+                      <a href="https://paypal.me/seospark151/79" className="block w-full bg-green-500 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-green-600">
+                        Lifetime — $79 one-time
                       </a>
                     </div>
                     <a href="/#pricing" className="inline-block text-xs text-gray-400 mt-3 hover:text-gray-600 underline">
@@ -497,13 +497,13 @@ export function DashboardForm({
               {!loading && result.seoScore > 0 && remaining !== null && remaining <= 1 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
                   <p className="text-sm font-semibold text-blue-800 mb-2">
-                    {remaining === 0 ? "Last free article! Get unlimited:" : "Like the quality? Get 30 more for $19/mo:"}
+                    {remaining === 0 ? "Last free article! Get unlimited:" : "Like the quality? Get Pro for $9:"}
                   </p>
                   <a
-                    href="https://paypal.me/seospark151/19"
+                    href="https://paypal.me/seospark151/9"
                     className="inline-block bg-blue-600 text-white text-sm px-6 py-2 rounded-lg font-semibold hover:bg-blue-700"
                   >
-                    Upgrade to Pro — $19/month
+                    Upgrade to Pro — $9 first month
                   </a>
                 </div>
               )}
