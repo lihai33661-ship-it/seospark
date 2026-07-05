@@ -89,9 +89,9 @@ export default function Home() {
           <p className="text-center text-gray-500 mb-12">Start free. Upgrade when you need more.</p>
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
-              { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, amount: 0 },
-              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, amount: 19 },
-              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "100 articles per month", "Custom brand voice (coming soon)", "Bulk generation (coming soon)", "API access (coming soon)"], hl: false, amount: 49 },
+              { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, link: "/dashboard" },
+              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, link: "https://pancake.waffo.ai/store/seo-spark-hds4h46t/product/PROD_3did1pwPxJPyguQ58Q7ECa?type=subscription&currency=USD" },
+              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "100 articles per month", "Custom brand voice (coming soon)", "Bulk generation (coming soon)", "API access (coming soon)"], hl: false, link: "https://pancake.waffo.ai/store/seo-spark-hds4h46t/product/PROD_4EWiprxTUGtQVekyE1nFUY?type=subscription&currency=USD" },
             ].map((plan) => (
               <div key={plan.n} className={`bg-white rounded-2xl p-6 border-2 ${plan.hl ? "border-blue-600 shadow-lg" : "border-gray-200"}`}>
                 {plan.hl && <span className="inline-block bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-3">Popular</span>}
@@ -103,7 +103,7 @@ export default function Home() {
                     <li key={feat} className="flex items-start gap-2 text-sm"><CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />{feat}</li>
                   ))}
                 </ul>
-                <a href={plan.amount > 0 ? `https://paypal.me/seospark151/${plan.amount}` : "/dashboard"} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.hl ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}`}>
+                <a href={plan.link} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.hl ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}`}>
                   {plan.p === "Free" ? "Start free" : "Get started"}
                 </a>
               </div>
