@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Send,
@@ -134,6 +134,15 @@ export function DashboardForm({
   const [leadEmail, setLeadEmail] = useState("");
   const [leadSaved, setLeadSaved] = useState(false);
   const [savingLead, setSavingLead] = useState(false);
+  const [history, setHistory] = useState<{ id: string; title: string; keywords: string; createdAt: string }[]>([]);
+
+  // Load history on mount
+  useEffect(() => {
+    fetch("/api/history")
+      .then((r) => r.json())
+      .then((data) => setHistory(data || []))
+      .catch(() => {});
+  }, []);
 
   const handleSaveLead = async () => {
     if (!leadEmail.includes("@")) return;
@@ -376,6 +385,25 @@ export function DashboardForm({
               </div>
             )}
           </div>
+
+          {history.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                Recent articles
+              </h3>
+              <div className="space-y-1 max-h-48 overflow-y-auto">
+                {history.slice(0, 5).map((h) => (
+                  <a
+                    key={h.id}
+                    href={`/dashboard?keyword=${encodeURIComponent(h.keywords)}`}
+                    className="block text-sm text-gray-600 hover:text-blue-600 truncate py-1"
+                  >
+                    {h.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex-1 min-w-0">

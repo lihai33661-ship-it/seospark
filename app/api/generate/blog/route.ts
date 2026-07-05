@@ -5,12 +5,20 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { streamBlogPost } from "@/lib/ai/blog-generator";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 const FREE_LIMIT = 3;
 
 function readCount(req: NextRequest): number {
   const raw = req.cookies.get("spark_usage")?.value;
   return raw ? parseInt(raw) || 0 : 0;
+}
+
+function getSessionId(req: NextRequest): string {
+  const existing = req.cookies.get("spark_sid")?.value;
+  if (existing) return existing;
+  return crypto.randomUUID();
 }
 
 export async function POST(req: NextRequest) {
@@ -35,6 +43,7 @@ export async function POST(req: NextRequest) {
 
     const newCount = count + 1;
     const remaining = FREE_LIMIT - newCount;
+    const sessionId = getSessionId(req);
 
     // Build the streaming response
     const encoder = new TextEncoder();
@@ -50,9 +59,26 @@ export async function POST(req: NextRequest) {
           });
 
           for await (const event of generator) {
-            const output = event.type === "done"
-              ? { ...event, remaining }
+            let output = event.type === "done"
+              ? { ...event, remaining, sessionId }
               : event;
+
+            // Save to DB on done
+            if (event.type === "done" && event.title) {
+              try {
+                await prisma.content.create({
+                  data: {
+                    sessionId,
+                    title: event.title,
+                    keywords: keyword,
+                    body: event.content || "",
+                  },
+                });
+              } catch (dbErr) {
+                console.error("Save content error:", dbErr);
+              }
+            }
+
             const line = JSON.stringify(output) + "\n";
             controller.enqueue(encoder.encode(line));
           }
@@ -76,7 +102,10 @@ export async function POST(req: NextRequest) {
         "Content-Type": "text/plain; charset=utf-8",
         "Cache-Control": "no-cache",
         "X-Content-Type-Options": "nosniff",
-        "Set-Cookie": `spark_usage=${newCount}; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365}; Path=/`,
+        "Set-Cookie": [
+          `spark_usage=${newCount}; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365}; Path=/`,
+          `spark_sid=${sessionId}; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365}; Path=/`,
+        ].join(", "),
       },
     });
 
