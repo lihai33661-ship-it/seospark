@@ -339,7 +339,13 @@ export function DashboardForm({
 
             {remaining !== null && (
               <p className="text-xs text-gray-500 mt-4 text-center font-medium">
-                {remaining > 0 ? `${remaining} free article${remaining > 1 ? "s" : ""} remaining` : "Last free article"}
+                {remaining === 0
+                  ? "Last free article"
+                  : remaining === 2
+                  ? `${remaining} free articles remaining`
+                  : remaining === 1
+                  ? "1 free article left. Like it? Upgrade below."
+                  : null}
               </p>
             )}
             {quotaExceeded && (
@@ -485,6 +491,20 @@ export function DashboardForm({
                       <span className="text-gray-700">{result.slug}</span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {!loading && result.seoScore > 0 && remaining !== null && remaining <= 1 && (
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+                  <p className="text-sm font-semibold text-blue-800 mb-2">
+                    {remaining === 0 ? "Last free article! Get unlimited:" : "Like the quality? Get 30 more for $19/mo:"}
+                  </p>
+                  <a
+                    href="https://paypal.me/seospark151/19"
+                    className="inline-block bg-blue-600 text-white text-sm px-6 py-2 rounded-lg font-semibold hover:bg-blue-700"
+                  >
+                    Upgrade to Pro — $19/month
+                  </a>
                 </div>
               )}
             </div>

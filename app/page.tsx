@@ -28,6 +28,13 @@ export default function Home() {
           />
         </div>
 
+        <div className="max-w-xl mx-auto mb-4">
+          <a href="/dashboard?keyword=email+marketing+tips" className="text-sm text-blue-600 hover:text-blue-800 underline">
+            See a sample article →
+          </a>
+          <span className="text-sm text-gray-400 ml-1">or enter your own keyword below</span>
+        </div>
+
         <form action="/dashboard" method="GET" className="max-w-xl mx-auto bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row gap-3 mb-3">
             <input
@@ -136,7 +143,21 @@ export default function Home() {
       <section id="pricing" className="bg-gray-50 py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-4">Simple pricing</h2>
-          <p className="text-center text-gray-500 mb-12">Start free. Upgrade when you need more.</p>
+          <p className="text-center text-gray-500 mb-4">Start free. Upgrade when you need more. Cancel anytime.</p>
+          <div className="flex items-center justify-center gap-4 mb-12 text-xs text-gray-400">
+            <span className="flex items-center gap-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              Cancel anytime
+            </span>
+            <span className="flex items-center gap-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              Secure payment via PayPal
+            </span>
+            <span className="flex items-center gap-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              3 free articles, no card
+            </span>
+          </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
               { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, link: "/dashboard" },
