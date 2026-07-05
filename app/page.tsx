@@ -128,8 +128,15 @@ export default function Home() {
         ))}
       </section>
 
-      <footer className="text-center py-8 text-sm text-gray-400 border-t border-gray-100">
-        &copy; 2026 SEO Spark. Built for small businesses that want to be found.
+      <footer className="text-center py-8 text-sm text-gray-400 border-t border-gray-100 space-y-2">
+        <p>&copy; 2026 SEO Spark. Built for small businesses that want to be found.</p>
+        <p>
+          <a href="/privacy" className="hover:text-gray-600 underline underline-offset-2">Privacy</a>
+          <span className="mx-2">·</span>
+          <a href="/terms" className="hover:text-gray-600 underline underline-offset-2">Terms</a>
+          <span className="mx-2">·</span>
+          <a href="mailto:seosparknet@gmail.com" className="hover:text-gray-600 underline underline-offset-2">Contact</a>
+        </p>
       </footer>
     </main>
   );
