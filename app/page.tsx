@@ -82,6 +82,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* vs ChatGPT */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2">"Can't I just use ChatGPT for free?"</h2>
+        <p className="text-center text-gray-500 mb-8">Yes. But free AI writes like AI. Here's the difference.</p>
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-2 gap-0">
+            <div className="p-6 border-r border-gray-100">
+              <p className="text-sm font-semibold text-gray-400 mb-3">FREE AI (ChatGPT, Claude)</p>
+              <ul className="space-y-2 text-sm text-gray-500">
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> Sounds like AI wrote it</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> No SEO scoring or guidance</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> Write your own prompts every time</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> Tweak, edit, reformat manually</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> No meta tags, no structure</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> Takes 20+ minutes to get publishable</li>
+              </ul>
+            </div>
+            <div className="p-6 bg-blue-50/50">
+              <p className="text-sm font-semibold text-blue-600 mb-3">SEO SPARK</p>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> Reads like a human wrote it</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> Built-in 8-dimension SEO score</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> One keyword, one click</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> Copy, paste, publish — done</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> Auto-generated SEO title & description</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span> Publish-ready in under 60 seconds</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="bg-gray-50 py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
