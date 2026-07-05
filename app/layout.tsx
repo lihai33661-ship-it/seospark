@@ -2,9 +2,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SEO Spark - AI SEO Content Generator",
+  title: "SEO Spark - AI Blog Posts That Rank on Google",
   description:
-    "Generate SEO-optimized blog posts, product descriptions, and landing pages in minutes.",
+    "One keyword → complete SEO blog post in 60 seconds. Real stats, real examples, ready to publish. 3 free articles, no credit card.",
+  openGraph: {
+    title: "SEO Spark - AI Blog Posts That Rank on Google",
+    description:
+      "One keyword → complete SEO blog post in 60 seconds. 3 free articles, no credit card.",
+    url: "https://seospark.net",
+    siteName: "SEO Spark",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SEO Spark - AI Blog Posts That Rank on Google",
+    description:
+      "One keyword → complete SEO blog post in 60 seconds. 3 free articles.",
+  },
 };
 
 export default function RootLayout({
