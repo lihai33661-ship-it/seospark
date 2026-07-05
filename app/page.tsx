@@ -142,8 +142,8 @@ export default function Home() {
       {/* Pricing */}
       <section id="pricing" className="bg-gray-50 py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-4">Simple pricing</h2>
-          <p className="text-center text-gray-500 mb-4">Start free. Upgrade when you need more. Cancel anytime.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-4">Launch week special</h2>
+          <p className="text-center text-gray-500 mb-4">Prices go up after July 14. Cancel anytime.</p>
           <div className="flex items-center justify-center gap-4 mb-12 text-xs text-gray-400">
             <span className="flex items-center gap-1">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
@@ -151,7 +151,7 @@ export default function Home() {
             </span>
             <span className="flex items-center gap-1">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-              Secure payment via PayPal
+              Secure via PayPal
             </span>
             <span className="flex items-center gap-1">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
@@ -160,22 +160,30 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
-              { n: "Starter", p: "Free", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, link: "/dashboard" },
-              { n: "Pro", p: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, link: "https://paypal.me/seospark151/19" },
-              { n: "Business", p: "$49", d: "100 articles / month", f: ["Everything in Pro", "100 articles per month", "Custom brand voice (coming soon)", "Bulk generation (coming soon)", "API access (coming soon)"], hl: false, link: "https://paypal.me/seospark151/49" },
+              { n: "Starter", p: "Free", oldP: "", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, link: "/dashboard", badge: "" },
+              { n: "Pro Launch", p: "$9", oldP: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, link: "https://paypal.me/seospark151/9", badge: "First month" },
+              { n: "Founding Member", p: "$79", oldP: "$199", d: "Lifetime · 100 articles/mo", f: ["Everything in Pro", "100 articles per month", "Lifetime access, no recurring", "Custom brand voice (coming)", "Bulk generation (coming)", "API access (coming)"], hl: false, link: "https://paypal.me/seospark151/79", badge: "Best value" },
             ].map((plan) => (
               <div key={plan.n} className={`bg-white rounded-2xl p-6 border-2 ${plan.hl ? "border-blue-600 shadow-lg" : "border-gray-200"}`}>
-                {plan.hl && <span className="inline-block bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-3">Popular</span>}
+                {plan.badge && (
+                  <span className={`inline-block text-xs px-3 py-1 rounded-full mb-3 ${plan.hl ? "bg-blue-600 text-white" : "bg-green-500 text-white"}`}>
+                    {plan.badge}
+                  </span>
+                )}
                 <h3 className="text-xl font-bold">{plan.n}</h3>
-                <div className="mt-3 mb-1"><span className="text-3xl font-bold">{plan.p}</span>{plan.p !== "Free" && <span className="text-gray-500">/mo</span>}</div>
+                <div className="mt-3 mb-1">
+                  <span className="text-3xl font-bold">{plan.p}</span>
+                  {plan.oldP && <span className="text-gray-400 line-through text-sm ml-2">{plan.oldP}</span>}
+                  {plan.p !== "Free" && plan.n !== "Founding Member" && <span className="text-gray-500">/mo</span>}
+                </div>
                 <p className="text-sm text-gray-500 mb-4">{plan.d}</p>
                 <ul className="space-y-2 mb-6">
                   {plan.f.map((feat) => (
                     <li key={feat} className="flex items-start gap-2 text-sm"><CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />{feat}</li>
                   ))}
                 </ul>
-                <a href={plan.link} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.hl ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}`}>
-                  {plan.p === "Free" ? "Start free" : "Get started"}
+                <a href={plan.link} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.hl ? "bg-blue-600 text-white hover:bg-blue-700" : plan.badge === "Best value" ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}`}>
+                  {plan.p === "Free" ? "Start free" : plan.n === "Founding Member" ? "Get lifetime access" : `Get Pro — ${plan.p}/mo`}
                 </a>
               </div>
             ))}
