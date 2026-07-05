@@ -16,3 +16,10 @@ model Content {
   type      String   @default("blog")
   createdAt DateTime @default(now())
 }
+
+model Lead {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("quota_exceeded")
+  createdAt DateTime @default(now())
+}

@@ -131,6 +131,23 @@ export function DashboardForm({
   const [copied, setCopied] = useState(false);
   const [remaining, setRemaining] = useState<number | null>(null);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadSaved, setLeadSaved] = useState(false);
+  const [savingLead, setSavingLead] = useState(false);
+
+  const handleSaveLead = async () => {
+    if (!leadEmail.includes("@")) return;
+    setSavingLead(true);
+    try {
+      await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: leadEmail }),
+      });
+      setLeadSaved(true);
+    } catch {}
+    setSavingLead(false);
+  };
 
   const handleGenerate = async () => {
     if (!keyword.trim()) {
@@ -319,18 +336,43 @@ export function DashboardForm({
             {quotaExceeded && (
               <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
                 <p className="text-sm font-semibold text-yellow-800 mb-2">Free limit reached</p>
-                <p className="text-xs text-yellow-600 mb-3">3 free articles used. Upgrade to keep generating.</p>
-                <div className="space-y-2">
-                  <a href="https://paypal.me/seospark151/19" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
-                    Upgrade Pro — $19/month
-                  </a>
-                  <a href="https://paypal.me/seospark151/49" className="block w-full bg-gray-100 text-gray-900 text-sm px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-                    Business — $49/month
-                  </a>
-                </div>
-                <a href="/#pricing" className="inline-block text-xs text-gray-400 mt-3 hover:text-gray-600 underline">
-                  Compare plans
-                </a>
+                {!leadSaved ? (
+                  <>
+                    <p className="text-xs text-yellow-600 mb-3">3 free articles used. Enter your email to unlock Pro.</p>
+                    <div className="flex gap-2 mb-2">
+                      <input
+                        type="email"
+                        placeholder="you@company.com"
+                        className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={leadEmail}
+                        onChange={(e) => setLeadEmail(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSaveLead()}
+                      />
+                      <button
+                        onClick={handleSaveLead}
+                        disabled={savingLead || !leadEmail.includes("@")}
+                        className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {savingLead ? "Saving..." : "Continue"}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs text-green-600 mb-3">Got it! Choose your plan:</p>
+                    <div className="space-y-2">
+                      <a href="https://paypal.me/seospark151/19" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                        Pro — $19/month
+                      </a>
+                      <a href="https://paypal.me/seospark151/49" className="block w-full bg-gray-100 text-gray-900 text-sm px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                        Business — $49/month
+                      </a>
+                    </div>
+                    <a href="/#pricing" className="inline-block text-xs text-gray-400 mt-3 hover:text-gray-600 underline">
+                      Compare plans
+                    </a>
+                  </>
+                )}
               </div>
             )}
           </div>
