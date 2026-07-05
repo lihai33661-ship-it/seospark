@@ -319,9 +319,17 @@ export function DashboardForm({
             {quotaExceeded && (
               <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
                 <p className="text-sm font-semibold text-yellow-800 mb-2">Free limit reached</p>
-                <p className="text-xs text-yellow-600 mb-3">Upgrade to Pro for unlimited articles</p>
-                <a href="/#pricing" className="inline-block bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
-                  See plans
+                <p className="text-xs text-yellow-600 mb-3">3 free articles used. Upgrade to keep generating.</p>
+                <div className="space-y-2">
+                  <a href="https://paypal.me/seospark151/19" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                    Upgrade Pro — $19/month
+                  </a>
+                  <a href="https://paypal.me/seospark151/49" className="block w-full bg-gray-100 text-gray-900 text-sm px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                    Business — $49/month
+                  </a>
+                </div>
+                <a href="/#pricing" className="inline-block text-xs text-gray-400 mt-3 hover:text-gray-600 underline">
+                  Compare plans
                 </a>
               </div>
             )}
