@@ -2,14 +2,31 @@
 
 import { useState } from "react";
 
+function getUsed(): number {
+  if (typeof document === "undefined") return 0;
+  const c = document.cookie.match(/shopify_used=(\d+)/);
+  return c ? parseInt(c[1]) : 0;
+}
+
+function incUsed() {
+  const n = getUsed() + 1;
+  document.cookie = `shopify_used=${n};max-age=31536000;path=/`;
+  return n;
+}
+
 export default function ShopifyPage() {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState("");
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
+  const [remaining, setRemaining] = useState(3 - getUsed());
+  const [upgraded, setUpgraded] = useState(false);
 
   const handleGenerate = async () => {
     if (!keyword.trim()) return;
+    const used = getUsed();
+    if (used >= 3) { setQuotaExceeded(true); return; }
     setError("");
     setLoading(true);
     setResult(null);
@@ -22,6 +39,9 @@ export default function ShopifyPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
       setResult(data);
+      const n = incUsed();
+      setRemaining(Math.max(0, 3 - n));
+      if (n >= 3) setQuotaExceeded(true);
     } catch (err: any) {
       setError(err.message || "Error");
     } finally {
@@ -63,9 +83,30 @@ export default function ShopifyPage() {
               {loading ? "Writing..." : "Generate"}
             </button>
           </div>
-          <p className="text-xs text-gray-400 mt-3">3 free articles. No credit card.</p>
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-xs text-gray-400">3 free articles. No credit card.</span>
+            {remaining < 3 && (
+              <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{remaining} free left</span>
+            )}
+          </div>
           {error && (
             <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
+          )}
+          {quotaExceeded && (
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+              <p className="font-semibold text-yellow-800 mb-1">Free limit reached</p>
+              <p className="text-sm text-yellow-600 mb-3">3 articles generated. Upgrade for unlimited.</p>
+              <div className="space-y-2">
+                <a href="https://paypal.me/seospark151/9" target="_blank"
+                  className="block w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-blue-700">
+                  Pro — $9.99/month (30 articles)
+                </a>
+                <a href="https://paypal.me/seospark151/29" target="_blank"
+                  className="block w-full bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-gray-200">
+                  Agency — $29/month (100 articles, 3 stores)
+                </a>
+              </div>
+            </div>
           )}
         </div>
 
