@@ -8,14 +8,20 @@ import {
 
 // ─── Fake Social Proof Data ───────────────────────────────────
 const NOTIFICATIONS = [
-  { name: "Sarah M.", action: "published an article", topic: "email marketing tips", time: "2 min ago", flag: "🇦🇺" },
-  { name: "James K.", action: "got to page 1 on Google", topic: "project management tools", time: "5 min ago", flag: "🇬🇧" },
-  { name: "Priya R.", action: "generated 5 blog posts", topic: "SaaS growth strategies", time: "8 min ago", flag: "🇮🇳" },
-  { name: "Marcus L.", action: "signed up for Pro", topic: "", time: "12 min ago", flag: "🇺🇸" },
-  { name: "Emma W.", action: "ranked #3 for", topic: "remote team management", time: "15 min ago", flag: "🇨🇦" },
-  { name: "Carlos G.", action: "created an article", topic: "e-commerce SEO", time: "18 min ago", flag: "🇪🇸" },
-  { name: "Yuki T.", action: "just joined", topic: "", time: "22 min ago", flag: "🇯🇵" },
-  { name: "Alex B.", action: "published 3 posts today", topic: "startup funding", time: "25 min ago", flag: "🇩🇪" },
+  { name: "Sarah M.", action: "published an article on", topic: "email marketing tips", time: "just now", flag: "🇦🇺" },
+  { name: "James K.", action: "got to page 1 for", topic: "project management tools", time: "3 min ago", flag: "🇬🇧" },
+  { name: "Priya R.", action: "generated 5 posts about", topic: "SaaS growth strategies", time: "7 min ago", flag: "🇮🇳" },
+  { name: "Marcus L.", action: "upgraded to Pro", topic: "", time: "9 min ago", flag: "🇺🇸" },
+  { name: "Emma W.", action: "ranked #3 for", topic: "remote team management", time: "14 min ago", flag: "🇨🇦" },
+  { name: "Carlos G.", action: "created an article on", topic: "e-commerce SEO", time: "18 min ago", flag: "🇪🇸" },
+  { name: "Yuki T.", action: "just joined SEO Spark", topic: "", time: "22 min ago", flag: "🇯🇵" },
+  { name: "Alex B.", action: "published 3 posts about", topic: "startup funding 2026", time: "28 min ago", flag: "🇩🇪" },
+  { name: "Fatima A.", action: "shared an article on", topic: "local SEO tips", time: "31 min ago", flag: "🇦🇪" },
+  { name: "Olga K.", action: "got featured snippet for", topic: "content marketing ROI", time: "35 min ago", flag: "🇺🇦" },
+  { name: "Raj P.", action: "generated 10 posts for", topic: "his SaaS blog", time: "42 min ago", flag: "🇸🇬" },
+  { name: "Mia L.", action: "just signed up", topic: "", time: "48 min ago", flag: "🇸🇪" },
+  { name: "Kevin N.", action: "replaced his $500 writer with", topic: "AI SEO content", time: "52 min ago", flag: "🇳🇱" },
+  { name: "Lisa C.", action: "ranked on page 1 for", topic: "vegan skincare guide", time: "1 hr ago", flag: "🇫🇷" },
 ];
 
 const TESTIMONIALS = [
@@ -51,30 +57,23 @@ const STATS = [
 // ─── Components ───────────────────────────────────────────────
 
 function NotificationTicker() {
-  const [current, setCurrent] = useState(0);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const rotate = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % NOTIFICATIONS.length);
-        setVisible(true);
-      }, 500);
-    }, 3500);
-    return () => clearInterval(rotate);
-  }, []);
-
-  const notif = NOTIFICATIONS[current];
-  const text = notif.topic
-    ? `${notif.flag} ${notif.name} ${notif.action} "${notif.topic}" · ${notif.time}`
-    : `${notif.flag} ${notif.name} ${notif.action} · ${notif.time}`;
+  const items = NOTIFICATIONS.map((n) =>
+    n.topic
+      ? `${n.flag} ${n.name} ${n.action} "${n.topic}" · ${n.time}`
+      : `${n.flag} ${n.name} ${n.action} · ${n.time}`
+  );
+  // Duplicate for seamless loop
+  const allItems = [...items, ...items];
 
   return (
     <div className="bg-blue-600 text-white py-2.5 overflow-hidden text-sm font-medium">
-      <div className={`flex items-center justify-center gap-2 transition-all duration-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}>
-        <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-        {text}
+      <div className="flex animate-marquee whitespace-nowrap">
+        {allItems.map((text, i) => (
+          <span key={i} className="inline-flex items-center gap-2 mx-6 shrink-0">
+            <span className="inline-block w-1.5 h-1.5 bg-green-400 rounded-full" />
+            {text}
+          </span>
+        ))}
       </div>
     </div>
   );
