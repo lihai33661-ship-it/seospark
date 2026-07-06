@@ -4,8 +4,21 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { generateFAQ } from "@/lib/ai/faq-generator";
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
+
+const DAILY_LIMIT = 3; // FAQ is more expensive (scraping + generation)
 
 export async function POST(req: NextRequest) {
+  // Rate limit
+  const ip = getClientIP(req);
+  const { allowed } = checkRateLimit(`faq:${ip}`, DAILY_LIMIT);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Free daily limit reached (${DAILY_LIMIT}/day). Come back tomorrow, or email seosparknet@gmail.com for beta access.` },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const { url, audience } = body;
