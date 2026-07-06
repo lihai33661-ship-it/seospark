@@ -53,18 +53,18 @@ export default async function Image() {
             marginBottom: "32px",
           }}
         >
-          AI Blog Posts That Rank on Google
+          Get found on Google.
+          We do the writing.
         </p>
         <p
           style={{
-            fontSize: "28px",
+            fontSize: "24px",
             color: "#bfdbfe",
             textAlign: "center",
             maxWidth: "700px",
           }}
         >
-          One keyword → complete SEO blog post in 60 seconds.
-          3 free articles. No credit card.
+          AI blog posts + 5 more free tools. No credit card.
         </p>
       </div>
     ),

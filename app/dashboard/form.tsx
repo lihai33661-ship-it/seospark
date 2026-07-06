@@ -519,6 +519,18 @@ export function DashboardForm({
               </p>
             </div>
           )}
+
+          {/* Tool ecosystem navigation */}
+          <div className="mt-8 bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">More free tools from SEO Spark</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+              <a href="/p/proposal" className="text-xs text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg px-3 py-2 transition-colors text-center border border-gray-100">🎯 Proposals</a>
+              <a href="/p/faq" className="text-xs text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg px-3 py-2 transition-colors text-center border border-gray-100">❓ FAQ Builder</a>
+              <a href="/p/email" className="text-xs text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg px-3 py-2 transition-colors text-center border border-gray-100">📬 Emails</a>
+              <a href="/p/product" className="text-xs text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg px-3 py-2 transition-colors text-center border border-gray-100">🛍 Products</a>
+              <a href="/p/cold-email" className="text-xs text-gray-600 hover:text-slate-700 hover:bg-slate-50 rounded-lg px-3 py-2 transition-colors text-center border border-gray-100">📧 Cold Email</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
