@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { CheckCircle, Copy, Send, Star, Zap, Target, TrendingUp, Clock, ArrowRight } from "lucide-react";
+import { CheckCircle, Copy, Send, Star, Zap, Target, TrendingUp, Clock, ArrowRight, Code, Palette, Smartphone } from "lucide-react";
+import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
+
+const PROPOSAL_LIMIT = 5;
 
 // ─── Data ──────────────────────────────────────────────────────
 const SAMPLE_PROPOSALS = [
@@ -54,17 +57,17 @@ I can have a working prototype in 2 weeks. Happy to share the GitHub repo of tha
 
 const TESTIMONIALS = [
   {
-    name: "Diego Ramirez", role: "Upwork Top Rated, Full-stack Dev", avatar: "🧔‍♂️",
+    name: "Diego Ramirez", role: "Upwork Top Rated, Full-stack Dev",
     text: "My proposal response rate went from 1 in 8 to 1 in 3. The hook is what does it — it references something specific from the client's post in the first two lines. Clients actually reply.",
     stars: 5,
   },
   {
-    name: "Anna Kowalski", role: "Fiverr Pro, UI/UX Designer", avatar: "👩‍🎨",
+    name: "Anna Kowalski", role: "Fiverr Pro, UI/UX Designer",
     text: "I send 8-10 proposals a day. Used to take 3 hours. Now it takes 30 minutes. That time goes straight into billable work. The ROI on this tool is absurd.",
     stars: 5,
   },
   {
-    name: "Wei Liu", role: "Toptal Developer, Mobile Specialist", avatar: "👨‍🔧",
+    name: "Wei Liu", role: "Toptal Developer, Mobile Specialist",
     text: "First proposal I sent using this got a reply in 15 minutes. The client said 'finally someone who read the requirements.' That's when I knew this wasn't just another AI wrapper.",
     stars: 5,
   },
@@ -147,6 +150,8 @@ export default function ProposalPage() {
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
+    const { allowed } = checkClientLimit("proposal", PROPOSAL_LIMIT);
+    if (!allowed) { setError(`You've used all ${PROPOSAL_LIMIT} free proposals today. Come back tomorrow.`); return; }
     setLoading(true); setError(""); setResult(null);
     try {
       const res = await fetch("/p/proposal/api/generate", {
@@ -155,7 +160,7 @@ export default function ProposalPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      recordClientUsage("proposal"); setResult(data);
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   }
@@ -260,6 +265,51 @@ export default function ProposalPage() {
         )}
       </section>
 
+      {/* ── Who uses this ────────────────────────────── */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[
+            { icon: <Code size={18} />, title: "Developers on Upwork", desc: "You can build anything. But writing about yourself isn't your strength. Get proposals that showcase your skills without sounding like a robot." },
+            { icon: <Palette size={18} />, title: "Designers on Fiverr", desc: "Your portfolio speaks volumes. Your proposal should too. Reference their brand, their problem, and your relevant past work — without spending 20 minutes per pitch." },
+            { icon: <Smartphone size={18} />, title: "Freelancers on Toptal", desc: "You're competing with the top 3%. Every word counts. Get proposals that prove you read the brief, understand the problem, and have solved it before." },
+          ].map(w => (
+            <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-emerald-200 hover:shadow-sm transition-all">
+              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mx-auto mb-3">{w.icon}</div>
+              <h3 className="font-semibold text-sm mb-1">{w.title}</h3>
+              <p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Why not just use templates ────────────────── */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="text-xl font-bold text-center mb-6">"Can't I just use a template?"</h2>
+          <div className="grid sm:grid-cols-2 gap-4 text-sm">
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="font-semibold text-red-600 mb-2">Generic Templates</p>
+              <ul className="space-y-1.5 text-gray-600 text-xs">
+                <li>· Clients have seen your template 100 times</li>
+                <li>· "Dear Sir/Madam, I am writing to express my interest..."</li>
+                <li>· Lists your skills without connecting them to their problem</li>
+                <li>· Takes just as long to customize as writing from scratch</li>
+              </ul>
+            </div>
+            <div className="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5">
+              <p className="font-semibold text-emerald-700 mb-2">Proposal Generator</p>
+              <ul className="space-y-1.5 text-gray-700 text-xs">
+                <li>· References the client's actual product, tech stack, and problem</li>
+                <li>· Opens with a hook that proves you read their brief</li>
+                <li>· Connects your specific past projects to their specific needs</li>
+                <li>· 30 seconds. Edit to add your voice. Send.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Social Proof ──────────────────────────────── */}
       <section className="border-t border-gray-100 mt-12 pt-16 pb-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -272,7 +322,6 @@ export default function ProposalPage() {
           {/* Testimonial */}
           <div className="max-w-2xl mx-auto bg-gray-50 rounded-2xl p-8">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">{tm.avatar}</span>
               <div><p className="font-semibold">{tm.name}</p><p className="text-sm text-gray-500">{tm.role}</p></div>
               <div className="ml-auto flex">{Array.from({ length: tm.stars }).map((_, i) => <Star key={i} size={14} className="text-yellow-400 fill-yellow-400" />)}</div>
             </div>

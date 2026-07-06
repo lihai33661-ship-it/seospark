@@ -26,22 +26,22 @@ const NOTIFICATIONS = [
 
 const TESTIMONIALS = [
   {
-    name: "Sarah Mitchell", role: "Founder, Bloom Digital Agency", avatar: "👩‍💼",
+    name: "Sarah Mitchell", role: "Founder, Bloom Digital Agency",
     text: "I was spending $500/month on freelance writers who didn't understand SEO. SEO Spark cut that to $19 and my posts actually rank now. Our organic traffic is up 40% in 3 months.",
     stars: 5,
   },
   {
-    name: "David Chen", role: "Solo Founder, TaskFlow.io", avatar: "👨‍💻",
+    name: "David Chen", role: "Solo Founder, TaskFlow.io",
     text: "I'm a developer, not a marketer. I knew I needed a blog but had no idea where to start. SEO Spark gave me publish-ready articles in 60 seconds. No exaggeration — my first post ranked on page 2 in two weeks.",
     stars: 5,
   },
   {
-    name: "Rachel Okafor", role: "Marketing Lead, ShopLocal", avatar: "👩🏾‍💼",
+    name: "Rachel Okafor", role: "Marketing Lead, ShopLocal",
     text: "We manage 3 e-commerce sites. Writing SEO content for all of them was a full-time job. Now one person handles it with SEO Spark. The SEO scoring feature alone is worth the subscription — we know exactly what to fix before publishing.",
     stars: 5,
   },
   {
-    name: "Michael Torres", role: "Freelance SEO Consultant", avatar: "🧔",
+    name: "Michael Torres", role: "Freelance SEO Consultant",
     text: "I use SEO Spark to draft client content, then add my expertise on top. What used to take 3 hours per article now takes 30 minutes. My clients are happier and I've doubled my client load without burning out.",
     stars: 4,
   },
@@ -355,7 +355,6 @@ export default function Home() {
           <div className="relative bg-white rounded-2xl border border-gray-200 p-8 sm:p-10 shadow-sm min-h-[240px] transition-all duration-500">
             <div key={testimonialIdx} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-4xl">{testimonial.avatar}</span>
                 <div>
                   <p className="font-semibold text-gray-900">{testimonial.name}</p>
                   <p className="text-sm text-gray-500">{testimonial.role}</p>

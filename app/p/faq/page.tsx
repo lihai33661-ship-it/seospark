@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircle, Copy, Search, ArrowRight, Star, TrendingUp, Eye, MousePointerClick, BarChart3, ChevronDown, Code, Zap } from "lucide-react";
+import { CheckCircle, Copy, Search, ArrowRight, Star, TrendingUp, Eye, MousePointerClick, BarChart3, ChevronDown, Code, Zap, Globe, ShoppingCart, Building2 } from "lucide-react";
+import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
+
+const FAQ_LIMIT = 3;
 
 // ─── Data ──────────────────────────────────────────────────────
 const TESTIMONIALS = [
@@ -205,6 +208,8 @@ export default function FAQPage() {
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault(); if (!url.trim()) return;
+    const { allowed } = checkClientLimit("faq", FAQ_LIMIT);
+    if (!allowed) { setError(`You've used all ${FAQ_LIMIT} free generations today. Come back tomorrow.`); return; }
     setLoading(true); setError(""); setResult(null);
     try {
       const res = await fetch("/p/faq/api/generate", {
@@ -213,7 +218,7 @@ export default function FAQPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      recordClientUsage("faq"); setResult(data);
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   }
@@ -320,8 +325,53 @@ export default function FAQPage() {
         </div>
       </section>
 
-      {/* ── Testimonials ──────────────────────────────── */}
+      {/* ── Who uses this ────────────────────────────── */}
       <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { icon: <Building2 size={18} />, title: "SaaS companies", desc: "Your help docs are buried in a knowledge base nobody reads. Turn them into an SEO-optimized FAQ page that ranks and deflects support tickets." },
+              { icon: <ShoppingCart size={18} />, title: "E-commerce stores", desc: "Customers have the same 10 questions. Answer them once on a FAQ page instead of 50 times in your inbox. Plus: Google shows FAQ rich results for product queries." },
+              { icon: <Globe size={18} />, title: "Agencies & freelancers", desc: "Deliver a comprehensive FAQ with every client site. Takes 2 minutes. Clients think you spent hours — and their site gets better SEO out of the box." },
+            ].map(w => (
+              <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-purple-200 hover:shadow-sm transition-all">
+                <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mx-auto mb-3">{w.icon}</div>
+                <h3 className="font-semibold text-sm mb-1">{w.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Why not DIY */}
+          <div className="mt-12">
+            <h2 className="text-xl font-bold text-center mb-6">"Can't I just write my own FAQ?"</h2>
+            <div className="grid sm:grid-cols-2 gap-4 text-sm max-w-3xl mx-auto">
+              <div className="bg-white border border-gray-200 rounded-xl p-5">
+                <p className="font-semibold text-red-600 mb-2">DIY FAQ</p>
+                <ul className="space-y-1.5 text-gray-600 text-xs">
+                  <li>· Brainstorm questions → miss half of what customers ask</li>
+                  <li>· Write answers → forget keywords → zero SEO benefit</li>
+                  <li>· No JSON-LD schema → Google ignores your content</li>
+                  <li>· Outdated in 3 months → nobody updates it</li>
+                </ul>
+              </div>
+              <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-5">
+                <p className="font-semibold text-purple-700 mb-2">FAQ Builder</p>
+                <ul className="space-y-1.5 text-gray-700 text-xs">
+                  <li>· Scans your site → generates questions customers actually search</li>
+                  <li>· SEO-optimized answers with natural keyword placement</li>
+                  <li>· JSON-LD schema included → eligible for Google rich results</li>
+                  <li>· 60 seconds. Copy-paste to your site. Done.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ──────────────────────────────── */}
+      <section className="pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <p className="text-xs text-gray-400 uppercase tracking-wider text-center mb-6">From teams using FAQ Builder</p>
           {/* Horizontal scroll on mobile, 3-column on desktop */}

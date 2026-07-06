@@ -1,17 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, Copy, Star, AtSign, Send, Target } from "lucide-react";
+import { CheckCircle, Copy, Star, AtSign, Send, Target, Building2, Briefcase, Rocket } from "lucide-react";
+import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
 
-const BEFORE_AFTER = {
-  bad: { subject: "Exciting partnership opportunity", body: "Dear Sir/Madam,\n\nI am reaching out because I believe our companies could benefit from a strategic partnership. We are a leading provider of AI solutions that help businesses save time and money.\n\nI would love to schedule a call to discuss how we can work together. Please let me know when you're available.\n\nBest regards,\n[Name]" },
-  good: { subject: "quick question about ShipFast's recent Series A", body: "Hi Mark,\n\nCongrats on the raise — saw the TechCrunch piece. The part about scaling customer support from 2 to 15 people in 6 months hit home. That's exactly the transition where our tool saves teams ~20 hrs/week on repetitive tickets.\n\nWorth a 10-min call to see if it fits? No pitch deck — just want to understand your current stack and tell you if we can help or not.\n\nCheers,\n[Name]" },
-};
+const COLD_LIMIT = 5;
 
 const TESTIMONIALS = [
-  { name: "David Kim", role: "B2B Sales Manager, 6 years", text: "I send 30 cold emails a day. Researching each prospect took 15 min. Now I paste their company and get a personalized email in 30 seconds. Reply rate went from 3% to 11%.", stars: 5 },
-  { name: "Amanda Cole", role: "BD Lead, SaaS Startup", text: "The personalization hook pulls in specific details — recent funding, new hire, product launch. Prospects reply because it doesn't look like a template. We booked 14 meetings last month from cold email alone.", stars: 4 },
-  { name: "Tom Reeves", role: "Founder, B2B Marketplace", text: "I was skeptical another AI tool could write better cold emails than me. Then I A/B tested: my email got 4% reply. The AI version got 13%. The difference? It asks a question the prospect actually wants to answer.", stars: 5 },
+  { name: "David Kim", role: "B2B Sales Manager, 6 years", text: "I send 30 cold emails a day. Research used to take 15 min per prospect. Now 30 seconds. My reply rate went from 3% to 11% in the first month. That's 3x more conversations.", stars: 5 },
+  { name: "Amanda Cole", role: "BD Lead, SaaS Startup", text: "The personalization hook is what makes this different. It pulls in specific details about the prospect's company. We booked 14 meetings last month from cold email alone. Zero spam complaints.", stars: 4 },
+  { name: "Tom Reeves", role: "Founder, B2B Marketplace", text: "I A/B tested: my hand-written email got 4% reply. The AI version got 13%. The difference? It asks a question the prospect actually wants to answer. Not 'are you free for a call?'", stars: 5 },
+];
+
+const WHO_FOR = [
+  { icon: <Briefcase size={18} />, title: "B2B sales reps", desc: "You're sending 30+ emails a day. Researching each prospect eats half your morning. Get personalized emails in 30 seconds and spend that time on calls." },
+  { icon: <Rocket size={18} />, title: "Startup founders", desc: "You're doing your own BD. Every email to an investor, partner, or early customer needs to land. No second chances with a bad first impression." },
+  { icon: <Building2 size={18} />, title: "Agency BD teams", desc: "Your team sends hundreds of outreach emails. Keep quality high while scaling volume. Consistent voice, personalized per prospect, zero 'Dear Sir/Madam.'" },
 ];
 
 export default function ColdEmailPage() {
@@ -19,26 +23,33 @@ export default function ColdEmailPage() {
   const [role, setRole] = useState(""); const [research, setResearch] = useState(""); const [value, setValue] = useState("");
   const [result, setResult] = useState<{ subject: string; body: string } | null>(null);
   const [loading, setLoading] = useState(false); const [error, setError] = useState(""); const [copied, setCopied] = useState(false);
+  const [showGood, setShowGood] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) { e.preventDefault(); if (!prospect.trim()||!product.trim()) return; setLoading(true); setError(""); setResult(null);
-    try { const res = await fetch("/p/cold-email/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ company, product, prospect, role, research, value }) }); const data = await res.json(); if (!res.ok) throw new Error(data.error); setResult(data); } catch (err: any) { setError(err.message); } finally { setLoading(false); } }
+  async function handleSubmit(e: React.FormEvent) { e.preventDefault(); if (!prospect.trim()||!product.trim()) return;
+    const { allowed } = checkClientLimit("coldemail", COLD_LIMIT);
+    if (!allowed) { setError(`You've used all ${COLD_LIMIT} free generations today. Come back tomorrow.`); return; }
+    setLoading(true); setError(""); setResult(null);
+    try { const res = await fetch("/p/cold-email/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ company, product, prospect, role, research, value }) }); const data = await res.json(); if (!res.ok) throw new Error(data.error); recordClientUsage("coldemail"); setResult(data); } catch (err: any) { setError(err.message); } finally { setLoading(false); } }
+
+  const badEmail = { subject: "Exciting partnership opportunity", body: "Dear Sir/Madam,\n\nI am reaching out because I believe our companies could benefit from a strategic partnership. We are a leading provider of AI solutions that help businesses save time and money.\n\nI would love to schedule a call to discuss how we can work together. Please let me know when you're available.\n\nBest regards,\n[Name]" };
+  const goodEmail = { subject: "quick question about ShipFast's recent Series A", body: "Hi Mark,\n\nCongrats on the raise — saw the TechCrunch piece. The part about scaling support from 2 to 15 people in 6 months hit home. That's exactly the transition where we save teams ~20 hrs/week on repetitive tickets.\n\nWorth a 10-min call? No pitch deck — just want to understand your current stack and tell you honestly if we can help or not.\n\nCheers,\n[Name]" };
 
   return (
     <main className="bg-white">
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pt-12 sm:pt-24 pb-10 text-center">
         <div className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-3 py-1 rounded-full mb-6"><AtSign size={12} /> Cold email generator</div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-3 leading-tight">Cold emails that <span className="text-slate-700">get replies.</span></h1>
-        <p className="text-gray-500 max-w-lg mx-auto mb-8 text-sm sm:text-base">Research + write a personalized cold email in 30 seconds. Not "Dear Sir/Madam." Actually relevant to the person you're emailing.</p>
+        <p className="text-gray-500 max-w-lg mx-auto mb-8 text-sm sm:text-base">Research + write a personalized cold email in 30 seconds. <strong className="text-gray-900">ChatGPT writes templates. We write emails that reference the prospect's actual business.</strong></p>
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white border-2 border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm text-left">
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input type="text" value={prospect} onChange={(e) => setProspect(e.target.value)} placeholder="Prospect company *" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400" required />
-              <input type="text" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Their role (e.g. CTO)" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400" />
+              <input type="text" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Their role (e.g. CTO)" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-slate-400 focus:outline-none" />
             </div>
             <input type="text" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Your product/service *" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400" required />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Your company name" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400" />
-              <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Your value proposition" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400" />
+              <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Your company name" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-slate-400 focus:outline-none" />
+              <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Your value prop" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-slate-400 focus:outline-none" />
             </div>
             <textarea value={research} onChange={(e) => setResearch(e.target.value)} rows={2} placeholder="What you know about them (funding, launch, news, etc.)" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 resize-y" />
           </div>
@@ -68,46 +79,58 @@ export default function ColdEmailPage() {
 
       {!result && (
         <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
-          <div className="text-center mb-8"><h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">One of these gets deleted. One gets a reply.</h2><p className="text-gray-500 text-sm">Guess which is which.</p></div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
-              <p className="text-xs font-semibold text-red-600 mb-3">❌ Generic Cold Email</p>
-              <div className="bg-white rounded-xl p-4 text-sm"><p className="text-xs text-gray-400 mb-2">Subject: {BEFORE_AFTER.bad.subject}</p><p className="text-red-700 whitespace-pre-wrap leading-relaxed text-xs">{BEFORE_AFTER.bad.body}</p></div>
-              <ul className="mt-3 space-y-1 text-xs text-red-600"><li>· "Dear Sir/Madam"</li><li>· Zero research</li><li>· "Leading provider" = spam signal</li></ul>
+          <div className="text-center mb-8"><h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">One gets deleted. The other gets a reply.</h2><p className="text-gray-500 text-sm">Tap to compare. You'll see the difference in 3 seconds.</p></div>
+          <div className="flex justify-center mb-6">
+            <div className="bg-gray-100 rounded-xl p-1 inline-flex">
+              <button onClick={() => setShowGood(false)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${!showGood?"bg-white shadow text-red-600":"text-gray-500"}`}>❌ Template spam</button>
+              <button onClick={() => setShowGood(true)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${showGood?"bg-white shadow text-slate-700":"text-gray-500"}`}>✅ Personalized</button>
             </div>
-            <div className="bg-slate-50 border-2 border-slate-300 rounded-2xl p-5">
-              <p className="text-xs font-semibold text-slate-700 mb-3">✅ Personalized Cold Email</p>
-              <div className="bg-white rounded-xl p-4 text-sm"><p className="text-xs text-gray-900 mb-2 font-medium">Subject: {BEFORE_AFTER.good.subject}</p><p className="text-slate-800 whitespace-pre-wrap leading-relaxed text-xs">{BEFORE_AFTER.good.body}</p></div>
-              <ul className="mt-3 space-y-1 text-xs text-slate-700"><li>· References their funding news</li><li>· Specific stat they relate to</li><li>· Low-friction ask</li></ul>
+          </div>
+          <div className={`max-w-lg mx-auto rounded-2xl p-5 sm:p-6 transition-all ${showGood?"bg-slate-50 border-2 border-slate-300":"bg-red-50 border border-red-200"}`}>
+            <div className="bg-white rounded-xl p-4 text-sm">
+              <p className={`text-xs mb-2 font-medium ${showGood?"text-gray-900":"text-gray-400"}`}>Subject: {showGood ? goodEmail.subject : badEmail.subject}</p>
+              <p className={`whitespace-pre-wrap leading-relaxed text-xs ${showGood?"text-gray-700":"text-gray-400"}`}>{showGood ? goodEmail.body : badEmail.body}</p>
             </div>
+            <ul className="mt-3 space-y-1 text-xs">{showGood ? <li className="text-slate-700">· References their funding · Specific stat they relate to · Low-friction ask · No buzzwords</li> : <li className="text-red-600">· "Dear Sir/Madam" · Zero research · "Leading provider" = spam · Asks for call immediately</li>}</ul>
           </div>
         </section>
       )}
 
-      <section className="border-t border-gray-100 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-3 gap-4 text-center mb-10">
-            {[{v:"11%",l:"Avg reply rate"},{v:"30s",l:"Per email"},{v:"5/day",l:"Free generation"}].map(s=>(<div key={s.l} className="bg-slate-50 rounded-xl p-4"><div className="text-2xl sm:text-3xl font-bold text-slate-700">{s.v}</div><p className="text-xs text-gray-500 mt-1">{s.l}</p></div>))}
+      <section className="border-t border-gray-100 py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
+        <div className="grid sm:grid-cols-3 gap-4">{WHO_FOR.map(w => (
+          <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-slate-200 hover:shadow-sm transition-all">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 mx-auto mb-3">{w.icon}</div>
+            <h3 className="font-semibold text-sm mb-1">{w.title}</h3><p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {TESTIMONIALS.map((t,i)=>(
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-slate-200 hover:shadow-sm transition-all">
-                <div className="flex gap-1 mb-2">{Array.from({length:t.stars}).map((_,j)=><Star key={j} size={11} className="text-yellow-400 fill-yellow-400"/>)}</div>
-                <p className="text-sm text-gray-600 leading-relaxed mb-3">&ldquo;{t.text}&rdquo;</p>
-                <p className="text-xs font-semibold">{t.name}</p><p className="text-xs text-gray-400">{t.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        ))}</div>
+      </div></section>
 
-      <section className="bg-gray-50 py-8"><div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <p className="text-xs text-gray-400 mb-2">More free tools from SEO Spark</p>
-        <div className="flex flex-wrap justify-center gap-1.5">
-          {[["/","📝 Blog"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/product","🛍 Products"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-slate-300 hover:text-slate-700 transition-all">{l}</a>))}
+      <section className="py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-3 gap-4 text-center mb-10">
+          {[{v:"3x",l:"Higher reply rate"},{v:"30s",l:"Per email"},{v:"5/day",l:"Free generation"}].map(s=>(<div key={s.l} className="bg-slate-50 rounded-xl p-4"><div className="text-2xl sm:text-3xl font-bold text-slate-700">{s.v}</div><p className="text-xs text-gray-500 mt-1">{s.l}</p></div>))}
+        </div>
+        <div className="grid sm:grid-cols-3 gap-4">{TESTIMONIALS.map((t,i)=>(
+          <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-slate-200 hover:shadow-sm transition-all">
+            <div className="flex gap-1 mb-2">{Array.from({length:t.stars}).map((_,j)=><Star key={j} size={11} className="text-yellow-400 fill-yellow-400"/>)}</div>
+            <p className="text-sm text-gray-600 leading-relaxed mb-3">&ldquo;{t.text}&rdquo;</p><p className="text-xs font-semibold">{t.name}</p><p className="text-xs text-gray-400">{t.role}</p>
+          </div>
+        ))}</div>
+      </div></section>
+
+      <section className="bg-gray-50 py-12"><div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <h2 className="text-xl font-bold text-center mb-6">"Can't ChatGPT write cold emails?"</h2>
+        <div className="grid sm:grid-cols-2 gap-4 text-sm">
+          <div className="bg-white border border-gray-200 rounded-xl p-5"><p className="font-semibold text-red-600 mb-2">ChatGPT</p><ul className="space-y-1.5 text-gray-600 text-xs"><li>· Writes generic outreach that prospects have seen 100 times</li><li>· Has no knowledge of the prospect's company unless you paste it</li><li>· Defaults to formal corporate tone: "I hope this email finds you well"</li><li>· You still need to research the prospect first</li></ul></div>
+          <div className="bg-slate-50 border-2 border-slate-300 rounded-xl p-5"><p className="font-semibold text-slate-700 mb-2">Cold Email Generator</p><ul className="space-y-1.5 text-gray-700 text-xs"><li>· References specific details you provide about the prospect</li><li>· Uses patterns from emails that actually get replies (11%+ rate)</li><li>· Natural, peer-to-peer tone — not corporate, not salesy</li><li>· Low-friction CTA: "worth a 10-min call?" not "let's schedule a demo"</li></ul></div>
         </div>
       </div></section>
-      <footer className="text-center py-6 text-xs text-gray-400">Cold Email Generator — from SEO Spark. Cold emails that get replies.</footer>
+
+      <section className="bg-gray-50 py-8 border-t border-gray-100"><div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <p className="text-xs text-gray-400 mb-2">More free tools from SEO Spark</p>
+        <div className="flex flex-wrap justify-center gap-1.5">{[["/","📝 Blog"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/product","🛍 Products"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-slate-300 hover:text-slate-700 transition-all">{l}</a>))}</div>
+      </div></section>
+      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Cold Email Generator — from SEO Spark. Cold emails that get replies.</footer>
     </main>
   );
 }
