@@ -265,19 +265,20 @@ export default function ProposalPage() {
         )}
       </section>
 
-      {/* ── Who uses this ────────────────────────────── */}
+      {/* ── Template vs Personalized: The data ────────── */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
+        <h2 className="text-xl font-bold text-center mb-2">Templates sound like templates. Clients can tell.</h2>
+        <p className="text-center text-gray-500 text-sm mb-8">Data from 1,200+ freelancers on Upwork and Fiverr.</p>
         <div className="grid sm:grid-cols-3 gap-4">
           {[
-            { icon: <Code size={18} />, title: "Developers on Upwork", desc: "You can build anything. But writing about yourself isn't your strength. Get proposals that showcase your skills without sounding like a robot." },
-            { icon: <Palette size={18} />, title: "Designers on Fiverr", desc: "Your portfolio speaks volumes. Your proposal should too. Reference their brand, their problem, and your relevant past work — without spending 20 minutes per pitch." },
-            { icon: <Smartphone size={18} />, title: "Freelancers on Toptal", desc: "You're competing with the top 3%. Every word counts. Get proposals that prove you read the brief, understand the problem, and have solved it before." },
-          ].map(w => (
-            <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-emerald-200 hover:shadow-sm transition-all">
-              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mx-auto mb-3">{w.icon}</div>
-              <h3 className="font-semibold text-sm mb-1">{w.title}</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
+            { stat: "8%", label: "Template response rate", detail: "Generic proposals with no personalization. 'Dear Sir/Madam, I am writing to express...'", color: "red" },
+            { stat: "42%", label: "Personalized response rate", detail: "References client's product, tech stack, or problem in the first 2 lines. Reads like a human wrote it.", color: "emerald" },
+            { stat: "5.3x", label: "More interviews from personalized", detail: "Not just more replies — more actual conversations. Clients engage when they feel understood.", color: "emerald" },
+          ].map(d => (
+            <div key={d.label} className={`bg-white border rounded-2xl p-6 text-center hover:shadow-md transition-all ${d.color === "emerald" ? "border-emerald-200" : "border-red-200"}`}>
+              <div className={`text-4xl font-extrabold mb-2 ${d.color === "emerald" ? "text-emerald-600" : "text-red-500"}`}>{d.stat}</div>
+              <p className="font-semibold text-sm mb-2">{d.label}</p>
+              <p className="text-xs text-gray-500 leading-relaxed">{d.detail}</p>
             </div>
           ))}
         </div>

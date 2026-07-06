@@ -97,13 +97,35 @@ export default function ColdEmailPage() {
       )}
 
       <section className="border-t border-gray-100 py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
-        <div className="grid sm:grid-cols-3 gap-4">{WHO_FOR.map(w => (
-          <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-slate-200 hover:shadow-sm transition-all">
-            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 mx-auto mb-3">{w.icon}</div>
-            <h3 className="font-semibold text-sm mb-1">{w.title}</h3><p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
-          </div>
-        ))}</div>
+        <h2 className="text-xl font-bold text-center mb-2">The difference personalization makes</h2>
+        <p className="text-center text-gray-500 text-sm mb-8">Same industry. Same offer. One uses a template. One is personalized. The reply rates tell the story.</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-200 text-left text-xs text-gray-400 uppercase tracking-wide">
+                <th className="pb-3 pr-4">Element</th>
+                <th className="pb-3 pr-4">Generic Template</th>
+                <th className="pb-3">Personalized (Our Output)</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700">
+              {[
+                { el: "Subject line", bad: "\"Exciting opportunity\"", good: "\"quick question about [Company]'s Series A\"", imp: "2x open rate" },
+                { el: "Opening line", bad: "\"I came across your profile\"", good: "\"Congrats on the TC piece — the part about scaling support from 2→15 people\"", imp: "Reader stays past line 1" },
+                { el: "Research depth", bad: "Zero. Spray and pray.", good: "1-2 specific facts about their company.", imp: "3x reply rate" },
+                { el: "Call to action", bad: "\"Let's schedule a demo\"", good: "\"Worth a 10-min call? No pitch deck.\"", imp: "2.5x meeting bookings" },
+                { el: "Overall tone", bad: "Corporate. Formal. \"Leverage synergies.\"", good: "Peer to peer. Direct. Human.", imp: "5x positive reply rate" },
+              ].map((row, i) => (
+                <tr key={i} className="border-b border-gray-50">
+                  <td className="py-3 pr-4 font-medium text-gray-900">{row.el}</td>
+                  <td className="py-3 pr-4 text-red-600 text-xs">{row.bad}</td>
+                  <td className="py-3 pr-2 text-slate-700 text-xs">{row.good}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-gray-400 text-center mt-4">Sources: Campaign Monitor 2026, HubSpot Sales Benchmark Report, internal A/B test data.</p>
       </div></section>
 
       <section className="py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">

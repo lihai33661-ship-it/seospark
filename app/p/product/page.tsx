@@ -99,13 +99,22 @@ export default function ProductPage() {
       )}
 
       <section className="border-t border-gray-100 py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
-        <div className="grid sm:grid-cols-3 gap-4">{WHO_FOR.map(w => (
-          <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-teal-200 hover:shadow-sm transition-all">
-            <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 mx-auto mb-3">{w.icon}</div>
-            <h3 className="font-semibold text-sm mb-1">{w.title}</h3><p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
-          </div>
-        ))}</div>
+        <h2 className="text-xl font-bold text-center mb-2">Same product. Different platform. Different description.</h2>
+        <p className="text-center text-gray-500 text-sm mb-8">Each marketplace has its own SEO rules and buyer expectations. We optimize for each.</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[
+            { platform: "Amazon", focus: "Keywords + specs first", rule: "Front-load primary keyword in title. 5 bullet points max, each under 200 chars. Benefit-heavy, not brand-heavy.", example: "Bamboo Desk Organizer — 5-Compartment Office Supply Tray with Phone Stand, Natural Bamboo, Weighted Base, Fits Standard Desk Shelves" },
+            { platform: "Shopify", focus: "Brand story + SEO", rule: "Weave brand voice into the description. Meta title and page title are separate. Emotional hook first, specs later. Cross-sell naturally within copy.", example: "Your desk called. It wants a upgrade. Handcrafted from a single sheet of Moso bamboo, this organizer doesn't just hold your stuff — it makes your stuff look intentional." },
+            { platform: "Etsy", focus: "Handmade story + tags", rule: "Etsy buyers search differently. Use all 13 tags. Lead with materials and process. 'Handcrafted' signals matter. Shorter titles than Amazon.", example: "Handcrafted Bamboo Desk Organizer — Natural Office Storage, 5 Compartments, Phone Stand, Minimalist Home Office Decor, Gift for Him" },
+          ].map(p => (
+            <div key={p.platform} className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-teal-200 hover:shadow-sm transition-all">
+              <h3 className="font-semibold text-sm mb-1 text-teal-700">{p.platform}</h3>
+              <p className="text-xs font-medium text-gray-500 mb-2">{p.focus}</p>
+              <p className="text-xs text-gray-500 mb-3 leading-relaxed">{p.rule}</p>
+              <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 italic leading-relaxed">&ldquo;{p.example}&rdquo;</div>
+            </div>
+          ))}
+        </div>
       </div></section>
 
       <section className="py-12"><div className="max-w-4xl mx-auto px-4 sm:px-6">

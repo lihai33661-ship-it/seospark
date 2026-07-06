@@ -124,16 +124,26 @@ export default function EmailPage() {
         </section>
       )}
 
-      {/* Who's this for */}
+      {/* Anatomy of the sequence */}
       <section className="border-t border-gray-100 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <h2 className="text-xl font-bold text-center mb-8">Who uses this</h2>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {WHO_FOR.map(w => (
-              <div key={w.title} className="bg-white border border-gray-100 rounded-2xl p-5 text-center hover:border-amber-200 hover:shadow-sm transition-all">
-                <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 mx-auto mb-3">{w.icon}</div>
-                <h3 className="font-semibold text-sm mb-1">{w.title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{w.desc}</p>
+          <h2 className="text-xl font-bold text-center mb-2">What your 5-email sequence does</h2>
+          <p className="text-center text-gray-500 text-sm mb-8">Each email has a job. Together they move a stranger to a customer.</p>
+          <div className="space-y-3">
+            {[
+              { num: "1", title: "Welcome + Deliver the Lead Magnet", goal: "Fulfill the promise. You said 'sign up and get X.' Give them X immediately. No selling.", metric: "Goal: 40%+ open rate" },
+              { num: "2", title: "Teach Something Useful", goal: "Pure value. Share a workflow, a tip, or a framework. Prove you understand their problem. Build credibility before asking for anything.", metric: "Goal: 15%+ click rate" },
+              { num: "3", title: "Social Proof / Case Study", goal: "Show results someone else got. Real numbers. Real name. This is the 'if they can do it, so can I' moment.", metric: "Goal: highest engagement of the sequence" },
+              { num: "4", title: "The Offer", goal: "Present your product as the natural next step. Not 'buy now.' More like 'you've learned the what and why — here's the how.' Address the #1 objection.", metric: "Goal: 5-10% conversion rate" },
+              { num: "5", title: "Last Chance + Recap", goal: "Summarize the value you've delivered. Restate the offer with urgency. Leave the door open: 'not ready? here's one more free resource.'", metric: "Goal: catch the ones who almost converted" },
+            ].map((s, i) => (
+              <div key={i} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:border-amber-200 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold shrink-0">{s.num}</div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-sm text-gray-900">{s.title}</h3>
+                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">{s.goal}</p>
+                  <p className="text-xs text-amber-600 mt-1 font-medium">{s.metric}</p>
+                </div>
               </div>
             ))}
           </div>
