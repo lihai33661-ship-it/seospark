@@ -155,7 +155,7 @@ export default function ShopifyPage() {
               { q: "Is it really free?", a: "Yes. 3 free articles, no credit card. Upgrade only if you need more than 3 per month." },
               { q: "Can I use this for any Shopify store?", a: "Yes. The content is optimized for e-commerce — product descriptions, buying guides, trend reports, comparison posts." },
               { q: "Do I own the content?", a: "Yes. All generated content is yours. No attribution required." },
-              { q: "What if I need help?", a: "Email us at seosparknet@gmail.com. We respond within 24 hours." },
+              { q: "What if I need help?", a: "Email us at hello@seospark.net. We respond within 24 hours." },
               { q: "How is this different from ChatGPT?", a: "Free AI writes like a machine. SEO Spark writes like a marketer — real company names, real stats, built-in SEO scoring. Ready to publish, not just generated." },
             ].map((faq) => (
               <div key={faq.q}>

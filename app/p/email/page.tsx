@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CheckCircle, Copy, Send, Star, Mail, ArrowRight, Zap, Users, ShoppingCart, Building2 } from "lucide-react";
 import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
 
-const EMAIL_LIMIT = 3;
+const EMAIL_LIMIT = 2;
 
 const TESTIMONIALS = [
   { name: "Jessica Park", role: "Founder, CraftBox", text: "I procrastinated on my email sequence for 6 months. This generated all 5 emails in 30 seconds. I tweaked two sentences and launched. 34% open rate on email #1.", stars: 5 },
@@ -52,7 +52,7 @@ export default function EmailPage() {
           <button type="submit" disabled={loading || !product.trim()} className="w-full mt-4 bg-amber-500 text-white px-6 py-3.5 rounded-xl font-bold hover:bg-amber-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm sm:text-base">
             {loading ? "Generating..." : <>Generate 5 Emails <Send size={16} /></>}
           </button>
-          <p className="text-xs text-gray-400 mt-3 text-center">3 free / day · No sign-up</p>
+          <p className="text-xs text-gray-400 mt-3 text-center">2 free / day · No sign-up</p>
           {error && <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600">{error}</div>}
         </form>
       </section>
@@ -185,10 +185,10 @@ export default function EmailPage() {
       <section className="bg-gray-50 py-8 border-t border-gray-100"><div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <p className="text-xs text-gray-400 mb-2">More free tools from SEO Spark</p>
         <div className="flex flex-wrap justify-center gap-1.5">
-          {[["/","📝 Blog Posts"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/product","🛍 Products"],["/p/cold-email","📧 Cold Email"]].map(([h,l]) => (<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-amber-300 hover:text-amber-600 transition-all">{l}</a>))}
+          {[["/","📝 SEO Spark"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/product","🛍 Products"],["/p/cold-email","📧 Cold Email"]].map(([h,l]) => (<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-amber-300 hover:text-amber-600 transition-all">{l}</a>))}
         </div>
       </div></section>
-      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Email Sequence Generator — from SEO Spark. Welcome emails that don't get ignored.</footer>
+      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Email Sequence Generator — from SEO Spark. <a href="/help" className="hover:text-gray-600 underline underline-offset-2">Help</a> · <a href="/" className="hover:text-gray-600 underline underline-offset-2">SEO Spark</a></footer>
     </main>
   );
 }

@@ -56,7 +56,7 @@ export default function Privacy() {
         <div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Contact</h2>
           <p>
-            Questions? Email us at <a href="mailto:seosparknet@gmail.com" className="text-blue-600 underline">seosparknet@gmail.com</a>.
+            Questions? Email us at <a href="mailto:hello@seospark.net" className="text-blue-600 underline">hello@seospark.net</a>.
           </p>
         </div>
       </section>

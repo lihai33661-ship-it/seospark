@@ -68,8 +68,8 @@ export default function Terms() {
           <h2 className="text-lg font-semibold text-gray-900 mb-2">8. Contact</h2>
           <p>
             For questions about these terms, email{' '}
-            <a href="mailto:seosparknet@gmail.com" className="text-blue-600 underline">
-              seosparknet@gmail.com
+            <a href="mailto:hello@seospark.net" className="text-blue-600 underline">
+              hello@seospark.net
             </a>.
           </p>
         </div>

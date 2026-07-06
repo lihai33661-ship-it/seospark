@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   const { allowed, remaining, resetAt } = checkRateLimit(`proposal:${ip}`, DAILY_LIMIT);
   if (!allowed) {
     return NextResponse.json(
-      { error: `Free daily limit reached (${DAILY_LIMIT}/day). Come back tomorrow, or email seosparknet@gmail.com for beta access.` },
+      { error: `Free daily limit reached (${DAILY_LIMIT}/day). Come back tomorrow, or email hello@seospark.net for beta access.` },
       { status: 429 }
     );
   }

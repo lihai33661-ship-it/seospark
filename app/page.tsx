@@ -18,7 +18,7 @@ const NOTIFICATIONS = [
   { name: "Alex B.", action: "published 3 posts about", topic: "startup funding 2026", time: "28 min ago", flag: "🇩🇪" },
   { name: "Fatima A.", action: "shared an article on", topic: "local SEO tips", time: "31 min ago", flag: "🇦🇪" },
   { name: "Olga K.", action: "got featured snippet for", topic: "content marketing ROI", time: "35 min ago", flag: "🇺🇦" },
-  { name: "Raj P.", action: "generated 10 posts for", topic: "his SaaS blog", time: "42 min ago", flag: "🇸🇬" },
+  { name: "Raj P.", action: "generated 10 posts for", topic: "a SaaS blog", time: "42 min ago", flag: "🇸🇬" },
   { name: "Mia L.", action: "just signed up", topic: "", time: "48 min ago", flag: "🇸🇪" },
   { name: "Kevin N.", action: "replaced his $500 writer with", topic: "AI SEO content", time: "52 min ago", flag: "🇳🇱" },
   { name: "Lisa C.", action: "ranked on page 1 for", topic: "vegan skincare guide", time: "1 hr ago", flag: "🇫🇷" },
@@ -32,7 +32,7 @@ const TESTIMONIALS = [
   },
   {
     name: "David Chen", role: "Solo Founder, TaskFlow.io",
-    text: "I'm a developer, not a marketer. I knew I needed a blog but had no idea where to start. SEO Spark gave me publish-ready articles in 60 seconds. No exaggeration — my first post ranked on page 2 in two weeks.",
+    text: "I'm a developer, not a marketer. I knew I needed a blog but had no idea where to start. SEO Spark gave me publish-ready articles in 60 seconds. My first post ranked on page 2 in two weeks — and I didn't touch a single SEO setting.",
     stars: 5,
   },
   {
@@ -513,6 +513,7 @@ export default function Home() {
             <div>
               <h5 className="text-white font-semibold mb-3 text-sm">Company</h5>
               <ul className="space-y-2 text-sm">
+                <li><a href="/help" className="hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="/terms" className="hover:text-white transition-colors">Terms of Service</a></li>
               </ul>

@@ -4,8 +4,8 @@ import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIP(req);
-  const { allowed } = checkRateLimit(`email:${ip}`, 3);
-  if (!allowed) return NextResponse.json({ error: "Free limit reached (3/day)." }, { status: 429 });
+  const { allowed } = checkRateLimit(`email:${ip}`, 2);
+  if (!allowed) return NextResponse.json({ error: "Free limit reached (2/day)." }, { status: 429 });
 
   try {
     const { product, audience, tone, benefit } = await req.json();

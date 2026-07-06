@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { CheckCircle, Copy, Search, ArrowRight, Star, TrendingUp, Eye, MousePointerClick, BarChart3, ChevronDown, Code, Zap, Globe, ShoppingCart, Building2 } from "lucide-react";
 import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
 
-const FAQ_LIMIT = 3;
+const FAQ_LIMIT = 2;
 
 // ─── Data ──────────────────────────────────────────────────────
 const TESTIMONIALS = [
@@ -260,7 +260,7 @@ export default function FAQPage() {
             {loading ? "Scanning..." : <>Generate <ArrowRight size={16} /></>}
           </button>
         </form>
-        <p className="text-xs text-gray-400 mt-4">Free beta · 3/day · No sign-up</p>
+        <p className="text-xs text-gray-400 mt-4">Free beta · 2/day · No sign-up</p>
         {error && <div className="mt-6 max-w-md mx-auto bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-600">{error}</div>}
       </section>
 
@@ -398,7 +398,7 @@ export default function FAQPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-xs text-gray-400 mb-3">More free tools from SEO Spark</p>
           <div className="flex flex-wrap justify-center gap-2">
-            {[["/","📝 SEO Spark"],["/p/proposal","🎯 Proposal Gen"],["/p/email","📬 Email Seq"],["/p/product","🛍 Product Desc"],["/p/cold-email","📧 Cold Email"]].map(([href, label]) => (
+            {[["/","📝 SEO Spark"],["/p/proposal","🎯 Proposals"],["/p/email","📬 Emails"],["/p/product","🛍 Products"],["/p/cold-email","📧 Cold Email"]].map(([href, label]) => (
               <a key={href} href={href} className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-medium text-gray-600 hover:border-purple-300 hover:text-purple-600 transition-all">{label}</a>
             ))}
           </div>
@@ -409,6 +409,8 @@ export default function FAQPage() {
         <p>FAQ Builder — from SEO Spark. Your FAQ, on Google. Not buried on page 3.</p>
         <p>
           <a href="/" className="hover:text-gray-600 underline underline-offset-2">SEO Spark</a>
+          <span className="mx-2">·</span>
+          <a href="/help" className="hover:text-gray-600 underline underline-offset-2">Help</a>
           <span className="mx-2">·</span>
           <a href="/p/proposal" className="hover:text-gray-600 underline underline-offset-2">Proposal Generator</a>
           <span className="mx-2">·</span>

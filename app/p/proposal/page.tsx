@@ -199,7 +199,7 @@ export default function ProposalPage() {
           {/* Right: Compact Form */}
           <div className="lg:sticky lg:top-8">
             <form onSubmit={handleGenerate} className="bg-white border-2 border-emerald-100 rounded-2xl p-6 shadow-lg">
-              <p className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">Paste a job. Get a pitch.</p>
+              <p className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">Paste job → get subject line + body + CTA</p>
               <div className="space-y-4">
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
                   placeholder='Job title (e.g. "Build a Shopify store")'
@@ -341,7 +341,7 @@ export default function ProposalPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-xs text-gray-400 mb-3">More free tools from SEO Spark</p>
           <div className="flex flex-wrap justify-center gap-2">
-            {[["/","📝 SEO Spark"],["/p/faq","❓ FAQ Builder"],["/p/email","📬 Email Seq"],["/p/product","🛍 Product Desc"],["/p/cold-email","📧 Cold Email"]].map(([href, label]) => (
+            {[["/","📝 SEO Spark"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/product","🛍 Products"],["/p/cold-email","📧 Cold Email"]].map(([href, label]) => (
               <a key={href} href={href} className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-medium text-gray-600 hover:border-emerald-300 hover:text-emerald-600 transition-all">{label}</a>
             ))}
           </div>
@@ -353,6 +353,8 @@ export default function ProposalPage() {
         <p>Proposal Generator — from the makers of SEO Spark. Get the client. We write the pitch.</p>
         <p>
           <a href="/" className="hover:text-gray-600 underline underline-offset-2">SEO Spark</a>
+          <span className="mx-2">·</span>
+          <a href="/help" className="hover:text-gray-600 underline underline-offset-2">Help</a>
           <span className="mx-2">·</span>
           <a href="/p/faq" className="hover:text-gray-600 underline underline-offset-2">FAQ Builder</a>
           <span className="mx-2">·</span>

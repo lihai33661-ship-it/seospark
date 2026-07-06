@@ -128,9 +128,9 @@ export default function ColdEmailPage() {
 
       <section className="bg-gray-50 py-8 border-t border-gray-100"><div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <p className="text-xs text-gray-400 mb-2">More free tools from SEO Spark</p>
-        <div className="flex flex-wrap justify-center gap-1.5">{[["/","📝 Blog"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/product","🛍 Products"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-slate-300 hover:text-slate-700 transition-all">{l}</a>))}</div>
+        <div className="flex flex-wrap justify-center gap-1.5">{[["/","📝 SEO Spark"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/product","🛍 Products"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-slate-300 hover:text-slate-700 transition-all">{l}</a>))}</div>
       </div></section>
-      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Cold Email Generator — from SEO Spark. Cold emails that get replies.</footer>
+      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Cold Email Generator — from SEO Spark. <a href="/help" className="hover:text-gray-600 underline underline-offset-2">Help</a> · <a href="/" className="hover:text-gray-600 underline underline-offset-2">SEO Spark</a></footer>
     </main>
   );
 }

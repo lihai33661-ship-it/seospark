@@ -40,7 +40,7 @@ export default function ProductPage() {
     <main className="bg-white">
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pt-12 sm:pt-24 pb-10 text-center">
         <div className="inline-flex items-center gap-1.5 text-xs font-medium text-teal-700 bg-teal-50 px-3 py-1 rounded-full mb-6"><ShoppingBag size={12} /> Product description generator</div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-3 leading-tight">Product descriptions that <span className="text-teal-600">sell. And rank.</span></h1>
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-3 leading-tight">Product descriptions that <span className="text-teal-600">sell and rank.</span></h1>
         <p className="text-gray-500 max-w-lg mx-auto mb-8 text-sm sm:text-base">One product → one SEO-optimized listing. Amazon, Shopify, Etsy, and more. <strong className="text-gray-900">ChatGPT writes words. We write listings that get found and bought.</strong></p>
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white border-2 border-teal-100 rounded-2xl p-5 sm:p-6 shadow-sm text-left">
           <div className="space-y-3">
@@ -130,9 +130,9 @@ export default function ProductPage() {
 
       <section className="bg-gray-50 py-8 border-t border-gray-100"><div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <p className="text-xs text-gray-400 mb-2">More free tools from SEO Spark</p>
-        <div className="flex flex-wrap justify-center gap-1.5">{[["/","📝 Blog"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/cold-email","📧 Cold"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-teal-300 hover:text-teal-600 transition-all">{l}</a>))}</div>
+        <div className="flex flex-wrap justify-center gap-1.5">{[["/","📝 SEO Spark"],["/p/proposal","🎯 Proposals"],["/p/faq","❓ FAQ"],["/p/email","📬 Emails"],["/p/cold-email","📧 Cold Email"]].map(([h,l])=>(<a key={h} href={h} className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-500 hover:border-teal-300 hover:text-teal-600 transition-all">{l}</a>))}</div>
       </div></section>
-      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Product Description Generator — from SEO Spark. Listings that sell. And rank.</footer>
+      <footer className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">Product Description Generator — from SEO Spark. <a href="/help" className="hover:text-gray-600 underline underline-offset-2">Help</a> · <a href="/" className="hover:text-gray-600 underline underline-offset-2">SEO Spark</a></footer>
     </main>
   );
 }

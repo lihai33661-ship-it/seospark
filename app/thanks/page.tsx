@@ -14,8 +14,8 @@ export default function ThanksPage() {
         </p>
         <p className="text-sm text-gray-400 mb-8">
           Questions? Email us at{" "}
-          <a href="mailto:seosparknet@gmail.com" className="text-blue-600 underline">
-            seosparknet@gmail.com
+          <a href="mailto:hello@seospark.net" className="text-blue-600 underline">
+            hello@seospark.net
           </a>
         </p>
         <a
