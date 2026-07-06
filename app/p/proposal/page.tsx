@@ -290,14 +290,11 @@ export default function ProposalPage() {
       {/* ── Cross-links ──────────────────────────────── */}
       <section className="bg-gray-50 py-10 mt-12">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-xs text-gray-400 mb-3">More tools from the makers of SEO Spark</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a href="/" className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-all">
-              📝 SEO Spark — Blog posts that rank
-            </a>
-            <a href="/p/faq" className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-purple-300 hover:text-purple-600 transition-all">
-              ❓ FAQ Builder — Auto-generate FAQ pages
-            </a>
+          <p className="text-xs text-gray-400 mb-3">More free tools from SEO Spark</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {[["/","📝 SEO Spark"],["/p/faq","❓ FAQ Builder"],["/p/email","📬 Email Seq"],["/p/product","🛍 Product Desc"],["/p/cold-email","📧 Cold Email"]].map(([href, label]) => (
+              <a key={href} href={href} className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-medium text-gray-600 hover:border-emerald-300 hover:text-emerald-600 transition-all">{label}</a>
+            ))}
           </div>
         </div>
       </section>

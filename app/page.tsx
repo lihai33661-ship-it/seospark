@@ -524,6 +524,9 @@ export default function Home() {
                 <li><a href="/dashboard" className="hover:text-white transition-colors">Blog Generator</a></li>
                 <li><a href="/p/proposal" className="hover:text-white transition-colors">Proposal Generator</a></li>
                 <li><a href="/p/faq" className="hover:text-white transition-colors">FAQ Builder</a></li>
+                <li><a href="/p/email" className="hover:text-white transition-colors">Email Sequences</a></li>
+                <li><a href="/p/product" className="hover:text-white transition-colors">Product Descriptions</a></li>
+                <li><a href="/p/cold-email" className="hover:text-white transition-colors">Cold Email</a></li>
               </ul>
             </div>
           </div>
