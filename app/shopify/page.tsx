@@ -147,6 +147,24 @@ export default function ShopifyPage() {
             </article>
           </div>
         )}
+
+        {!loading && !result && (
+          <div className="mt-12 max-w-xl mx-auto text-sm text-gray-400 space-y-4 pb-12">
+            <h3 className="text-lg font-semibold text-gray-600 mb-4">FAQ</h3>
+            {[
+              { q: "Is it really free?", a: "Yes. 3 free articles, no credit card. Upgrade only if you need more than 3 per month." },
+              { q: "Can I use this for any Shopify store?", a: "Yes. The content is optimized for e-commerce — product descriptions, buying guides, trend reports, comparison posts." },
+              { q: "Do I own the content?", a: "Yes. All generated content is yours. No attribution required." },
+              { q: "What if I need help?", a: "Email us at seosparknet@gmail.com. We respond within 24 hours." },
+              { q: "How is this different from ChatGPT?", a: "Free AI writes like a machine. SEO Spark writes like a marketer — real company names, real stats, built-in SEO scoring. Ready to publish, not just generated." },
+            ].map((faq) => (
+              <div key={faq.q}>
+                <p className="font-medium text-gray-600">{faq.q}</p>
+                <p className="mt-1">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
