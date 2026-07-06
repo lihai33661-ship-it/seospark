@@ -365,7 +365,6 @@ export default function FAQPage() {
           <span className="mx-2">·</span>
           <a href="/p/proposal" className="hover:text-gray-600 underline underline-offset-2">Proposal Generator</a>
           <span className="mx-2">·</span>
-          <a href="mailto:seosparknet@gmail.com" className="hover:text-gray-600 underline underline-offset-2">Contact</a>
         </p>
       </footer>
     </main>
