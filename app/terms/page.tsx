@@ -50,9 +50,9 @@ export default function Terms() {
         <div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Payments</h2>
           <p>
-            Paid plans are processed through PayPal. Subscriptions are monthly and
-            can be canceled at any time. Refunds are handled on a case-by-case basis —
-            contact us if you're not satisfied.
+            Paid plans are processed through Paddle. Subscriptions are monthly and
+            can be canceled at any time. Refunds are handled as described in our
+            <a href="/refund" className="text-blue-600 underline">Refund Policy</a>.
           </p>
         </div>
 

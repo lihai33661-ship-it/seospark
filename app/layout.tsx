@@ -53,6 +53,23 @@ export default function RootLayout({
             `,
           }}
         />
+        <script src="https://cdn.paddle.com/paddle/v2/paddle.js" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              Paddle.Initialize({
+                token: "live_ea37a1e52778f26cd2b22acc810",
+                checkout: {
+                  settings: {
+                    displayMode: "overlay",
+                    theme: "light",
+                    allowLogout: false,
+                  },
+                },
+              });
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-white">{children}</body>
     </html>
