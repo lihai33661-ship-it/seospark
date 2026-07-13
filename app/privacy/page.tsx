@@ -24,8 +24,8 @@ export default function Privacy() {
         <div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">3. Payment Information</h2>
           <p>
-            Payments are processed through Paddle. We never see or store your payment details
-            (credit card numbers, bank accounts). Paddle handles all payment data securely.
+            Payments are processed through PayPal. We never see or store your payment details
+            (credit card numbers, bank accounts). PayPal handles all payment data securely.
           </p>
         </div>
 

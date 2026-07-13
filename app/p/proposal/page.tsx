@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { CheckCircle, Copy, Send, Star, Zap, Target, TrendingUp, Clock, ArrowRight } from "lucide-react";
+import { CheckCircle, Copy, Send, Star, Zap, Target, TrendingUp, Clock, ArrowRight, Code, Palette, Smartphone } from "lucide-react";
 import { checkClientLimit, recordClientUsage } from "@/lib/client-limit";
 
 const PROPOSAL_LIMIT = 5;
@@ -236,7 +236,6 @@ export default function ProposalPage() {
             </div>
           </div>
         </div>
-
 
         {/* Mobile demo */}
         <div className="lg:hidden mt-8">

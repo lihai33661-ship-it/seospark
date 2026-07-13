@@ -5,7 +5,6 @@ import {
   Sparkles, BarChart3, Zap, Globe, CheckCircle, ArrowRight,
   Star, TrendingUp, Clock, Shield, Users, FileText, Copy, Search
 } from "lucide-react";
-import PaddleButton from "./components/PaddleButton";
 
 // ─── Fake Social Proof Data ───────────────────────────────────
 const NOTIFICATIONS = [
@@ -439,8 +438,8 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
               { n: "Starter", p: "Free", oldP: "", d: "3 articles", f: ["Blog generator", "SEO scoring", "Basic templates"], hl: false, link: "/dashboard", badge: "", btn: "Start free", btnStyle: "bg-gray-100 text-gray-900 hover:bg-gray-200" },
-              { n: "Pro Launch", p: "$9", oldP: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, priceId: "pri_01kwxmqxt5cwcv5tf32g4gn5kd", badge: "First month", btn: "Get Pro — $9/mo", btnStyle: "bg-blue-600 text-white hover:bg-blue-700" },
-              { n: "Founding Member", p: "$79", oldP: "$199", d: "Lifetime · 100 articles/mo", f: ["Everything in Pro", "100 articles per month", "Lifetime access, no recurring", "Custom brand voice (coming)", "Bulk generation (coming)", "API access (coming)"], hl: false, priceId: "pri_01kwxmrt4r0y3143tj0pz5e7d1", badge: "Best value", btn: "Get lifetime access", btnStyle: "bg-green-500 text-white hover:bg-green-600" },
+              { n: "Pro Launch", p: "$9", oldP: "$19", d: "30 articles / month", f: ["Everything in Starter", "30 articles per month", "Priority generation speed", "Email support", "Early access to new features"], hl: true, link: "https://paypal.me/seospark151/9", badge: "First month", btn: "Get Pro — $9/mo", btnStyle: "bg-blue-600 text-white hover:bg-blue-700" },
+              { n: "Founding Member", p: "$79", oldP: "$199", d: "Lifetime · 100 articles/mo", f: ["Everything in Pro", "100 articles per month", "Lifetime access, no recurring", "Custom brand voice (coming)", "Bulk generation (coming)", "API access (coming)"], hl: false, link: "https://paypal.me/seospark151/79", badge: "Best value", btn: "Get lifetime access", btnStyle: "bg-green-500 text-white hover:bg-green-600" },
             ].map((plan) => (
               <div key={plan.n} className={`bg-white rounded-2xl p-6 border-2 ${plan.hl ? "border-blue-600 shadow-xl relative ring-4 ring-blue-100" : "border-gray-200"}`}>
                 {plan.badge && (
@@ -462,18 +461,9 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                {"priceId" in plan ? (
-                  <PaddleButton
-                    priceId={plan.priceId!}
-                    className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${plan.btnStyle}`}
-                  >
-                    {plan.btn}
-                  </PaddleButton>
-                ) : (
-                  <a href={plan.link} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${plan.btnStyle}`}>
-                    {plan.btn}
-                  </a>
-                )}
+                <a href={plan.link} className={`block text-center w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${plan.btnStyle}`}>
+                  {plan.btn}
+                </a>
               </div>
             ))}
           </div>
