@@ -2,6 +2,12 @@ import Link from "next/link";
 
 const POSTS = [
   {
+    slug: "automate-seo-content-saas",
+    title: "How to Automate SEO Content for Your SaaS — A No-Fluff Guide for Indie Hackers",
+    excerpt: "I spent 3 months building an automated SEO content system for my SaaS. Here's exactly how it works — the tools, the workflow, and what I'd do differently.",
+    date: "2026-07-14",
+  },
+  {
     slug: "why-small-business-blogs-dont-rank",
     title: "I Analyzed 200 Small Business Blogs. Here's Why 96% Don't Rank on Google",
     excerpt: "I spent a weekend analyzing 200 small business blogs to find out why most never get any Google traffic. The answer surprised me — and it's not what you think.",
@@ -205,7 +211,7 @@ export default function BlogIndex() {
     <main className="max-w-3xl mx-auto px-6 py-16 sm:py-20">
       <h1 className="text-3xl sm:text-4xl font-bold mb-4">SEO Spark Blog</h1>
       <p className="text-gray-500 mb-2 text-lg">
-        Practical SEO guides for small business owners. 32 articles on AI writing, Google rankings, and content marketing.
+        Practical SEO guides for small business owners. 33 articles on AI writing, Google rankings, and content marketing.
       </p>
       <p className="text-sm text-gray-400 mb-10">
         Want a specific topic covered? Email us at{" "}

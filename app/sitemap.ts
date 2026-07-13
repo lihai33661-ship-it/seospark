@@ -495,5 +495,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/blog/seo-reporting-guide`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/blog/seo-vs-ppc-comparison`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/blog/serp-features-guide`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/blog/automate-seo-content-saas`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
   ];
 }
