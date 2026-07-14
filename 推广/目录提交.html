@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>SEO Spark 目录提交</title>
+<style>
+body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8f9fa; }
+.card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin: 16px 0; }
+h1 { font-size: 24px; margin-bottom: 8px; }
+h2 { font-size: 18px; margin: 0 0 8px 0; }
+a.submit-link { display: inline-block; background: #2563eb; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 8px 0; }
+a.submit-link:hover { background: #1d4ed8; }
+.copy-block { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; margin: 8px 0; white-space: pre-wrap; }
+.copy-btn { font-size: 12px; padding: 4px 12px; background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; margin-top: 4px; }
+.note { font-size: 13px; color: #64748b; margin-top: 4px; }
+.priority { display: inline-block; background: #fef3c7; color: #92400e; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>SEO Spark 目录提交手册</h1>
+<p style="color:#64748b;margin-bottom:24px">点击蓝色按钮直接打开提交页面，复制对应内容粘贴即可。</p>
+
+<!-- 通用资料 -->
+<div class="card" style="border:2px solid #2563eb;">
+<h2 style="color:#2563eb;">📋 通用资料（复制粘贴用）</h2>
+
+<div class="copy-block" id="tagline">AI blog posts that rank on Google — one keyword, publish-ready in 60 seconds.</div>
+<button class="copy-btn" onclick="copyText('tagline')">复制 Tagline</button>
+<p class="note">▲ 一句话介绍 - 单行用</p>
+
+<div class="copy-block" id="desc">SEO Spark generates SEO-optimized blog posts in 60 seconds. Type one keyword and get a complete article with built-in keyword strategy, EEAT signals, meta tags, heading hierarchy, and real-time SEO scoring (0-100). ChatGPT writes words — SEO Spark writes content that ranks on Google. Free tier: 3 articles, no credit card.</div>
+<button class="copy-btn" onclick="copyText('desc')">复制描述</button>
+<p class="note">▲ 详细描述 - 多行用</p>
+
+<div class="copy-block" id="info">Name: SEO Spark
+URL: https://seospark.net
+Category: SEO, AI Writing Assistant, Content Marketing, SaaS
+Pricing: Freemium (Free / $9 mo / $79 lifetime)
+Twitter: @gorgeous4ew</div>
+<button class="copy-btn" onclick="copyText('info')">复制基本信息</button>
+<p class="note">▲ 分类和价格信息</p>
+</div>
+
+<!-- 目录列表 -->
+<div class="card">
+<span class="priority">SEO 价值最高</span>
+<h2>1. AlternativeTo</h2>
+<p class="note">软件替代品目录，把 ChatGPT/Jasper 列为替代品，DA 高</p>
+<a class="submit-link" href="https://alternativeto.net/add/" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<span class="priority">SEO 价值高</span>
+<h2>2. SaaSHub</h2>
+<p class="note">SaaS 工具目录，有真实流量</p>
+<a class="submit-link" href="https://www.saashub.com/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>3. Uneed</h2>
+<p class="note">活跃社区，支持 Google 一键登录</p>
+<a class="submit-link" href="https://www.uneed.best/submit-a-tool" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>4. DevHunt</h2>
+<p class="note">开发者工具发布平台</p>
+<a class="submit-link" href="https://devhunt.org/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>5. BetaList</h2>
+<p class="note">创业公司展示，需审核</p>
+<a class="submit-link" href="https://betalist.com/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>6. Peerlist Launchpad</h2>
+<a class="submit-link" href="https://peerlist.io/launchpad" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>7. MicroLaunch</h2>
+<a class="submit-link" href="https://microlaunch.net/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>8. Fazier</h2>
+<a class="submit-link" href="https://fazier.com/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>9. Launching Next</h2>
+<a class="submit-link" href="https://www.launchingnext.com/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<div class="card">
+<h2>10. SideProjectors</h2>
+<a class="submit-link" href="https://www.sideprojectors.com/submit" target="_blank">打开提交页面 →</a>
+</div>
+
+<script>
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent);
+  const btn = event.target;
+  btn.textContent = '已复制!';
+  setTimeout(() => btn.textContent = btn.textContent === '已复制!' ? '复制' : '已复制!', 1500);
+}
+</script>
+
+</body>
+</html>

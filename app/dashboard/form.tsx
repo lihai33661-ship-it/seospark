@@ -195,57 +195,34 @@ export function DashboardForm({
         throw new Error(errMsg);
       }
 
-      // ===== Streaming reader =====
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error("No response stream");
-
-      const decoder = new TextDecoder();
-      let buffer = "";
+      // ===== Read all at once =====
+      const text = await res.text();
+      const lines = text.split("\n").filter((l) => l.trim());
       let streamedContent = "";
-      let streamDone = false;
 
-      while (!streamDone) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          try {
-            const event = JSON.parse(line);
-            if (event.type === "chunk" && event.content) {
-              streamedContent += event.content;
-              setResult({
-                title: "",
-                content: streamedContent,
-                seoTitle: "",
-                seoDescription: "",
-                slug: "",
-                seoScore: 0,
-              });
-            } else if (event.type === "done") {
-              streamDone = true;
-              setResult({
-                title: event.title,
-                content: event.content,
-                seoTitle: event.seoTitle || event.title,
-                seoDescription: event.seoDescription,
-                slug: event.slug,
-                seoScore: event.seoScore,
-              });
-              if (typeof event.remaining === "number") {
-                setRemaining(event.remaining);
-              }
-            } else if (event.type === "error") {
-              throw new Error(event.error);
+      for (const line of lines) {
+        try {
+          const event = JSON.parse(line);
+          if (event.type === "chunk" && event.content) {
+            streamedContent += event.content;
+          } else if (event.type === "done") {
+            setResult({
+              title: event.title || "",
+              content: event.content || streamedContent,
+              seoTitle: event.seoTitle || event.title || "",
+              seoDescription: event.seoDescription || "",
+              slug: event.slug || "",
+              seoScore: event.seoScore || 0,
+            });
+            if (typeof event.remaining === "number") {
+              setRemaining(event.remaining);
             }
-          } catch (parseErr) {
-            if (parseErr instanceof SyntaxError) continue;
-            throw parseErr;
+          } else if (event.type === "error") {
+            throw new Error(event.error);
           }
+        } catch (parseErr) {
+          if (parseErr instanceof SyntaxError) continue;
+          throw parseErr;
         }
       }
     } catch (err) {
@@ -376,10 +353,10 @@ export function DashboardForm({
                   <>
                     <p className="text-xs text-green-600 mb-3">Got it! Choose your plan:</p>
                     <div className="space-y-2">
-                      <a href="https://paypal.me/seospark151/9" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                      <a href="https://www.paypal.com/ncp/payment/P3ZX5Z6PTGMDN" className="block w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
                         Pro — $9 first month (launch)
                       </a>
-                      <a href="https://paypal.me/seospark151/79" className="block w-full bg-green-500 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-green-600">
+                      <a href="https://www.paypal.com/ncp/payment/TYFEEFMRPHYP4" className="block w-full bg-green-500 text-white text-sm px-4 py-2 rounded-lg font-semibold hover:bg-green-600">
                         Lifetime — $79 one-time
                       </a>
                     </div>
@@ -494,13 +471,23 @@ export function DashboardForm({
                 </div>
               )}
 
+              {!loading && result.content && (
+                <div className="mt-4 text-center">
+                  <a href="/featured-on" target="_blank" rel="noopener" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:from-blue-400 hover:to-purple-400 transition-all">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    Powered by SEO Spark
+                  </a>
+                  <p className="text-xs text-gray-400 mt-2">Add this badge to your article → <a href="/featured-on" className="text-blue-500 underline">Get embed code</a></p>
+                </div>
+              )}
+
               {!loading && result.seoScore > 0 && remaining !== null && remaining <= 1 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
                   <p className="text-sm font-semibold text-blue-800 mb-2">
                     {remaining === 0 ? "Last free article! Get unlimited:" : "Like the quality? Get Pro for $9:"}
                   </p>
                   <a
-                    href="https://paypal.me/seospark151/9"
+                    href="https://www.paypal.com/ncp/payment/P3ZX5Z6PTGMDN"
                     className="inline-block bg-blue-600 text-white text-sm px-6 py-2 rounded-lg font-semibold hover:bg-blue-700"
                   >
                     Upgrade to Pro — $9 first month

@@ -1,0 +1,12 @@
+export const metadata = { title: "7 SEO Mistakes Small Businesses Make — And How to Fix Them in 2026 | SEO Spark", description: "Most small businesses make the same SEO mistakes. Learn the 7 most common ones — from ignoring EEAT to keyword stuffing — and exactly how to fix each one." };
+
+export default function Post() { return (<main className="max-w-3xl mx-auto px-6 py-12 sm:py-16"><p className="text-sm text-gray-400 mb-2">July 8, 2026</p><h1 className="text-2xl sm:text-3xl font-bold mb-6">7 SEO Mistakes Small Businesses Make (And How to Fix Them)</h1><article className="prose max-w-none space-y-4 text-gray-700 leading-relaxed">
+<p>Small businesses don't fail at SEO because Google is too competitive. They fail because they make the same preventable mistakes. Here are the seven most common ones and how to fix each.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">1. Writing About Yourself Instead of What Customers Search</h2><p>Your homepage says "We're the best." Your customers search "how to fix a leaky faucet." Fix: write content around customer search intent, not company ego.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">2. Publishing 3 Articles and Giving Up</h2><p>SEO is a volume game. Sites with 50+ articles get 4x more traffic than sites with under 10. Use <a href="/dashboard" className="text-blue-600 underline">an AI blog writer</a> to publish faster.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">3. Ignoring EEAT Signals</h2><p>Generic content without personal experience doesn't rank in 2026. Every article needs real stories, specific examples, and honest opinions.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">4. No Meta Descriptions</h2><p>Missing meta descriptions cost you clicks even when you rank. Always include keyword-optimized meta descriptions.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">5. Slow Site Speed</h2><p>Google's Core Web Vitals are ranking factors. Use PageSpeed Insights to check your score. Optimize images, enable caching, use a CDN.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">6. No Internal Links</h2><p>Pages without internal links are orphan pages — Google assumes they're unimportant. Link every new article to at least 3 other pages on your site.</p>
+<h2 className="text-xl font-bold mt-6 mb-2">7. Not Tracking Anything</h2><p>If you don't have Google Search Console set up, you're flying blind. It's free. Set it up today. <a href="/dashboard" className="text-blue-600 underline font-semibold">Then start writing → 3 free SEO articles</a></p>
+</article></main>); }

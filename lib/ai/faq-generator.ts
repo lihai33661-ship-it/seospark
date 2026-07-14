@@ -2,9 +2,8 @@
  * FAQ Builder — AI FAQ generator from website content
  * Crawls a URL, extracts content, generates FAQ section
  */
+import { callAI } from "./shared";
 
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || "";
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const JINA_KEY = process.env.JINA_API_KEY || "";
 
 export const FAQ_GENERATION_PROMPT = `You are an SEO and customer support expert. Generate a comprehensive FAQ section for a website.
@@ -111,32 +110,6 @@ function extractSiteName(url: string, content: string): string {
   } catch {
     return url;
   }
-}
-
-async function callAI(prompt: string): Promise<string> {
-  const res = await fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENROUTER_KEY}`,
-      "HTTP-Referer": "https://seospark.net",
-      "X-Title": "SEO Spark",
-    },
-    body: JSON.stringify({
-      model: "meta-llama/llama-4-maverick",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 2000,
-      temperature: 0.7,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || "";
 }
 
 export async function generateFAQ(request: FAQRequest): Promise<FAQResult> {

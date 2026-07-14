@@ -1,10 +1,8 @@
 /**
  * Proposal Generator — AI pitch writer for freelancers
- * OpenRouter API → Llama 4 Maverick
+ * OpenRouter primary → SiliconFlow fallback
  */
-
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || "";
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+import { callAI } from "./shared";
 
 export const PROPOSAL_PROMPT = `You are a top-earning freelancer on Upwork who wins 40% of proposals. You write pitches that get interviews.
 
@@ -49,32 +47,6 @@ interface ProposalRequest {
 export interface ProposalResult {
   content: string;
   subjectLine: string;
-}
-
-async function callAI(prompt: string): Promise<string> {
-  const res = await fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENROUTER_KEY}`,
-      "HTTP-Referer": "https://seospark.net",
-      "X-Title": "SEO Spark",
-    },
-    body: JSON.stringify({
-      model: "meta-llama/llama-4-maverick",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 1000,
-      temperature: 0.8,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || "";
 }
 
 export async function generateProposal(

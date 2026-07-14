@@ -1,0 +1,9 @@
+export const metadata = { title: "How Often Should a Small Business Blog? — Publishing Frequency for SEO Results | SEO Spark", description: "How many blog posts per week does your small business need to see SEO results? Data-backed publishing frequency guide for 2026 — from twice a week to daily." };
+
+export default function Post() { return (<main className="max-w-3xl mx-auto px-6 py-12 sm:py-16"><p className="text-sm text-gray-400 mb-2">July 8, 2026</p><h1 className="text-2xl sm:text-3xl font-bold mb-6">How Often Should a Small Business Blog?</h1><article className="prose max-w-none space-y-4 text-gray-700 leading-relaxed">
+<p>The data is clear: companies that publish 2-4 blog posts per week get 3.5x more traffic than those publishing less than 1 per week. But frequency alone isn't the answer — consistency and quality matter more than raw volume.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">The Minimum Viable Frequency</h2><p>2 posts per week. This gives Google a steady signal that your site is active. It also builds a content library fast: 104 articles per year. That's enough topical depth to rank for dozens of keywords.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">How to Hit 2x/Week Without Burning Out</h2><p>Use <a href="/dashboard" className="text-blue-600 underline">an AI blog writer</a> to draft both articles in 5 minutes on Monday. Spend Tuesday and Wednesday editing — adding personal stories, real examples, and your unique perspective. Publish Thursday and Friday.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">Quality Still Beats Quantity</h2><p>Two thoughtful 800-word articles per week will outperform five generic AI-generated posts. The AI handles the structure and research. You provide the experience and voice. That combination is what Google rewards.</p>
+<p><a href="/dashboard" className="text-blue-600 underline font-semibold">Write 2 posts in 5 minutes → 3 free articles</a></p>
+</article></main>); }

@@ -1,0 +1,9 @@
+export const metadata = { title: "Content Writing vs Copywriting — What's the Difference and Which Does Your Business Need? | SEO Spark", description: "Content writing attracts. Copywriting converts. Learn the difference between content writing and copywriting, and how to use both for your small business marketing strategy." };
+
+export default function Post() { return (<main className="max-w-3xl mx-auto px-6 py-12 sm:py-16"><p className="text-sm text-gray-400 mb-2">July 8, 2026</p><h1 className="text-2xl sm:text-3xl font-bold mb-6">Content Writing vs Copywriting: What Your Business Actually Needs</h1><article className="prose max-w-none space-y-4 text-gray-700 leading-relaxed">
+<p>Content writing brings people to your site. Copywriting makes them take action. Both matter — but for different stages of the customer journey.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">Content Writing = Attract and Educate</h2><p>Blog posts, guides, how-to articles. The goal: rank on Google, answer questions, build trust. Content writing is the long game — articles compound over months into steady organic traffic. Use <a href="/dashboard" className="text-blue-600 underline">an AI blog writer</a> to produce SEO content at scale.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">Copywriting = Persuade and Convert</h2><p>Landing pages, sales emails, ad copy. The goal: get the reader to take a specific action immediately. Every word serves the conversion goal.</p>
+<h2 className="text-xl font-bold mt-8 mb-3">The Small Business Formula</h2><p>80% content writing (brings traffic) + 20% copywriting (converts traffic). Blog posts attract visitors. Email sequences and landing pages convert them. Build the content engine first, then layer on conversion copy.</p>
+<p><a href="/dashboard" className="text-blue-600 underline font-semibold">Build your content engine → 3 free SEO articles</a></p>
+</article></main>); }

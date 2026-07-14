@@ -1,11 +1,16 @@
 /**
  * 博客文章生成器
- * OpenRouter API → Claude Sonnet
+ * OpenRouter primary → SiliconFlow fallback
  */
 import { BLOG_GENERATION_PROMPT } from "./prompts";
 
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const SF_KEY = process.env.SILICONFLOW_API_KEY || "";
+const SF_URL = "https://api.siliconflow.cn/v1/chat/completions";
+
+const PRIMARY_MODEL = "meta-llama/llama-4-maverick";
+const FALLBACK_MODEL = "deepseek-ai/DeepSeek-V3";
 
 interface BlogRequest {
   topic: string;
@@ -47,8 +52,9 @@ function parseBlogOutput(raw: string): {
   };
 }
 
-async function callClaude(prompt: string): Promise<string> {
-  const res = await fetch(OPENROUTER_URL, {
+async function callAI(prompt: string): Promise<string> {
+  // Try OpenRouter first
+  let res = await fetch(OPENROUTER_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +63,7 @@ async function callClaude(prompt: string): Promise<string> {
       "X-Title": "SEO Spark",
     },
     body: JSON.stringify({
-      model: "meta-llama/llama-4-maverick",
+      model: PRIMARY_MODEL,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
       temperature: 0.85,
@@ -65,8 +71,28 @@ async function callClaude(prompt: string): Promise<string> {
   });
 
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+    const errText = await res.text();
+    console.warn("[AI] OpenRouter failed, falling back to SiliconFlow:", errText.slice(0, 100));
+
+    // Fallback to SiliconFlow
+    res = await fetch(SF_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${SF_KEY}`,
+      },
+      body: JSON.stringify({
+        model: FALLBACK_MODEL,
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 3000,
+        temperature: 0.85,
+      }),
+    });
+
+    if (!res.ok) {
+      const sfErr = await res.text();
+      throw new Error(`Both providers failed. SiliconFlow ${res.status}: ${sfErr}`);
+    }
   }
 
   const data = await res.json();
@@ -156,7 +182,7 @@ export async function* streamBlogPost(
     .replace("{{AUDIENCE}}", request.audience || "small business owners")
     .replace("{{TONE}}", request.tone || "professional and direct");
 
-  const res = await fetch(OPENROUTER_URL, {
+  let res = await fetch(OPENROUTER_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -165,7 +191,7 @@ export async function* streamBlogPost(
       "X-Title": "SEO Spark",
     },
     body: JSON.stringify({
-      model: "meta-llama/llama-4-maverick",
+      model: PRIMARY_MODEL,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
       temperature: 0.85,
@@ -174,8 +200,61 @@ export async function* streamBlogPost(
   });
 
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+    const errText = await res.text();
+    console.warn("[AI] OpenRouter stream failed, falling back to SiliconFlow:", errText.slice(0, 100));
+
+    // Fallback to SiliconFlow (non-streaming for reliability)
+    res = await fetch(SF_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${SF_KEY}`,
+      },
+      body: JSON.stringify({
+        model: FALLBACK_MODEL,
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 3000,
+        temperature: 0.85,
+      }),
+    });
+
+    if (!res.ok) {
+      const sfErr = await res.text();
+      throw new Error(`Both providers failed. SiliconFlow ${res.status}: ${sfErr}`);
+    }
+
+    const data = await res.json();
+    const fullText = data.choices?.[0]?.message?.content || "";
+
+    if (!fullText || fullText.length < 200) {
+      throw new Error("AI generation too short. Please try again.");
+    }
+
+    // Yield as single chunk for fallback (non-streaming)
+    yield { type: "chunk", content: fullText };
+
+    const { content, seoTitle, seoDescription, slug } = parseBlogOutput(fullText);
+    const titleMatch = content.match(/^#\s+(.+)$/m);
+    const title = titleMatch?.[1] || request.topic;
+
+    const seoScore = calculateSEOScore({
+      content,
+      keyword: request.keyword,
+      title,
+      seoTitle,
+      seoDescription,
+    });
+
+    yield {
+      type: "done",
+      title,
+      content: content.replace(/^#\s+.+\n?/, "").trim(),
+      seoTitle: seoTitle || title,
+      seoDescription,
+      slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      seoScore,
+    };
+    return;
   }
 
   let fullText = "";
@@ -248,7 +327,7 @@ export async function generateBlogPost(
     .replace("{{AUDIENCE}}", request.audience || "small business owners")
     .replace("{{TONE}}", request.tone || "professional and direct");
 
-  const rawOutput = await callClaude(prompt);
+  const rawOutput = await callAI(prompt);
 
   if (!rawOutput || rawOutput.length < 200) {
     throw new Error("AI generation too short. Please try again.");
