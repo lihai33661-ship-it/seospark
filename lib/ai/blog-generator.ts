@@ -9,8 +9,8 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const SF_KEY = process.env.SILICONFLOW_API_KEY || "";
 const SF_URL = "https://api.siliconflow.cn/v1/chat/completions";
 
-const PRIMARY_MODEL = "meta-llama/llama-4-maverick";
-const FALLBACK_MODEL = "deepseek-ai/DeepSeek-V3";
+const PRIMARY_MODEL = "anthropic/claude-sonnet-4";
+const FALLBACK_MODEL = "meta-llama/llama-4-maverick";
 
 interface BlogRequest {
   topic: string;
@@ -84,7 +84,7 @@ async function callAI(prompt: string): Promise<string> {
       body: JSON.stringify({
         model: FALLBACK_MODEL,
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 3000,
+        max_tokens: 4096,
         temperature: 0.7,
       }),
     });
@@ -213,7 +213,7 @@ export async function* streamBlogPost(
       body: JSON.stringify({
         model: FALLBACK_MODEL,
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 3000,
+        max_tokens: 4096,
         temperature: 0.7,
       }),
     });
