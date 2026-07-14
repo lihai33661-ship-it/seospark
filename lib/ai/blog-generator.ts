@@ -69,7 +69,7 @@ async function callAI(systemPrompt: string, userPrompt: string): Promise<string>
         { role: "user", content: userPrompt },
       ],
       max_tokens: 4096,
-      temperature: 0.0,
+      temperature: 0.01,
     }),
   });
 
@@ -91,7 +91,7 @@ async function callAI(systemPrompt: string, userPrompt: string): Promise<string>
           { role: "user", content: userPrompt },
         ],
         max_tokens: 4096,
-        temperature: 0.0,
+        temperature: 0.01,
       }),
     });
 
@@ -203,7 +203,7 @@ export async function* streamBlogPost(
         { role: "user", content: userPrompt },
       ],
       max_tokens: 4096,
-      temperature: 0.0,
+      temperature: 0.01,
       stream: true,
     }),
   });
@@ -226,7 +226,7 @@ export async function* streamBlogPost(
           { role: "user", content: userPrompt },
         ],
         max_tokens: 4096,
-        temperature: 0.0,
+        temperature: 0.01,
       }),
     });
 
