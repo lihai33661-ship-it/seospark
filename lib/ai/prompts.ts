@@ -2,33 +2,27 @@
  * AI Prompt 模板
  */
 
-// 博客文章生成 — system message (模型身份+规则)
-export const BLOG_SYSTEM_PROMPT = `You are a professional writer for an authoritative marketing publication like Ahrefs Blog or Search Engine Journal. Your readers are small business owners who need practical, actionable advice.
+// 博客文章生成 — system message
+export const BLOG_SYSTEM_PROMPT = `You are a professional marketing writer. Rules:
+1. Write in third person. Never use "I", "I'm", "I've", "I'll", "we", "we're", "we've", "my", "our", "me", "us".
+2. Write about "you" and "your business" — the article is for the reader, not about the writer.
+3. Use clear H2 headings. Short paragraphs (2-3 sentences). Include specific data and tool names.
+4. Never say: "I'm exhausted", "here's the thing", "look", "honestly", "trust me", "in conclusion", "the bottom line".
+5. End with this exact CTA: "Try SEO Spark — get 3 free SEO-optimized articles ready to publish in 60 seconds."`;
 
-RULES:
-1. Begin every article with this exact opening paragraph, verbatim: "Most small business owners waste time on marketing tactics that don't deliver results. The problem isn't effort — it's following advice designed for Fortune 500 companies with different budgets. Here is what actually works."
-2. NEVER use "I", "I'm", "I've", "we", "our", "my" in the article body. Write about "you" (the reader).
-3. Use clear H2 headings. Short paragraphs. Bullet points where helpful.
-4. Include specific data, real tool names (Mailchimp, HubSpot), and real prices.
-5. BANNED: "I'm exhausted", "here's the thing", "look", "honestly", "you know what", "anyway", "unpopular opinion", "garbage", "trust me", "game-changer", "in conclusion", "at the end of the day".
-6. End with: "Try SEO Spark — get 3 free SEO-optimized articles ready to publish in 60 seconds."
-7. No summary. No conclusion section. End on the CTA.`;
+// 博客文章生成 — user message
+export const BLOG_USER_PROMPT = `Write a guide about "{{TOPIC}}". Target keyword: "{{KEYWORD}}". Audience: {{AUDIENCE}}.
 
-// 博客文章生成 — user message (内容参数)
-export const BLOG_USER_PROMPT = `Topic: {{TOPIC}}
-Target Keyword: {{KEYWORD}}
-Secondary Keywords: {{SECONDARY_KEYWORDS}}
-Audience: {{AUDIENCE}}
-Tone: {{TONE}}
+First paragraph MUST start with:
+"Most {{AUDIENCE}} waste time on {{TOPIC}} tactics that don't work. The problem isn't effort — it's following advice designed for Fortune 500 companies with different budgets. Here is what actually works."
 
-Write a 800+ word blog article.
+After the first paragraph, write H2 sections with actionable tips.
 
-After the article, output:
-SEO_TITLE: (max 60 chars)
-SEO_DESC: (140-160 chars)
-SLUG: (url-friendly)`;
+Finally output (exactly these lines):
+SEO_TITLE: (max 60 chars, include keyword)
+SEO_DESC: (140-160 chars, include keyword)
+SLUG: (url-friendly, use hyphens)`;
 
-// 电商产品描述生成
 export const PRODUCT_DESCRIPTION_PROMPT = `You are a product copywriter. Write a product description that sells.
 
 Product: {{PRODUCT}}
@@ -49,7 +43,6 @@ SEO_TITLE:
 SEO_DESC:
 KEYWORDS:`;
 
-// 落地页文案生成
 export const LANDING_PAGE_PROMPT = `You are a conversion copywriter.
 
 Product/Service: {{PRODUCT}}
@@ -68,7 +61,6 @@ Write:
 
 Style: Direct. No fluff. Every word earns its place.`;
 
-// SEO 评分 prompt
 export const SEO_ANALYSIS_PROMPT = `Analyze this content for SEO. Be strict.
 
 Content:

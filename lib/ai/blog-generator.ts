@@ -9,7 +9,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const SF_KEY = process.env.SILICONFLOW_API_KEY || "";
 const SF_URL = "https://api.siliconflow.cn/v1/chat/completions";
 
-const PRIMARY_MODEL = "openai/gpt-4o";
+const PRIMARY_MODEL = "deepseek/deepseek-chat";
 const FALLBACK_MODEL = "deepseek-ai/DeepSeek-V3";
 
 interface BlogRequest {
@@ -69,7 +69,7 @@ async function callAI(systemPrompt: string, userPrompt: string): Promise<string>
         { role: "user", content: userPrompt },
       ],
       max_tokens: 4096,
-      temperature: 0.3,
+      temperature: 0.0,
     }),
   });
 
@@ -91,7 +91,7 @@ async function callAI(systemPrompt: string, userPrompt: string): Promise<string>
           { role: "user", content: userPrompt },
         ],
         max_tokens: 4096,
-        temperature: 0.3,
+        temperature: 0.0,
       }),
     });
 
@@ -203,7 +203,7 @@ export async function* streamBlogPost(
         { role: "user", content: userPrompt },
       ],
       max_tokens: 4096,
-      temperature: 0.3,
+      temperature: 0.0,
       stream: true,
     }),
   });
@@ -226,7 +226,7 @@ export async function* streamBlogPost(
           { role: "user", content: userPrompt },
         ],
         max_tokens: 4096,
-        temperature: 0.3,
+        temperature: 0.0,
       }),
     });
 
