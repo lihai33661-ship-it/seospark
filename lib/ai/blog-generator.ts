@@ -9,8 +9,8 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const SF_KEY = process.env.SILICONFLOW_API_KEY || "";
 const SF_URL = "https://api.siliconflow.cn/v1/chat/completions";
 
-const PRIMARY_MODEL = "anthropic/claude-sonnet-4";
-const FALLBACK_MODEL = "meta-llama/llama-4-maverick";
+const PRIMARY_MODEL = "openai/gpt-4o-mini";
+const FALLBACK_MODEL = "deepseek-ai/DeepSeek-V3";
 
 interface BlogRequest {
   topic: string;
