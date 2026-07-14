@@ -66,7 +66,7 @@ async function callAI(prompt: string): Promise<string> {
       model: PRIMARY_MODEL,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
-      temperature: 0.85,
+      temperature: 0.7,
     }),
   });
 
@@ -85,7 +85,7 @@ async function callAI(prompt: string): Promise<string> {
         model: FALLBACK_MODEL,
         messages: [{ role: "user", content: prompt }],
         max_tokens: 3000,
-        temperature: 0.85,
+        temperature: 0.7,
       }),
     });
 
@@ -194,7 +194,7 @@ export async function* streamBlogPost(
       model: PRIMARY_MODEL,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 3000,
-      temperature: 0.85,
+      temperature: 0.7,
       stream: true,
     }),
   });
@@ -214,7 +214,7 @@ export async function* streamBlogPost(
         model: FALLBACK_MODEL,
         messages: [{ role: "user", content: prompt }],
         max_tokens: 3000,
-        temperature: 0.85,
+        temperature: 0.7,
       }),
     });
 
