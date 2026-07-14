@@ -256,6 +256,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Testimonials ──────────────────────────── */}
+      <section className="border-t border-white/5 py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold text-purple-400 uppercase tracking-widest mb-3">Testimonials</p>
+            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              Loved by founders who actually rank
+            </h2>
+          </div>
+          <div className="relative bg-white/[0.03] border border-white/10 rounded-2xl p-8 sm:p-10 min-h-[200px]">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex gap-1 mb-6">
+                {Array.from({ length: testimonial.stars }).map((_, i) => (
+                  <Star key={i} size={18} className="text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-lg text-gray-300 leading-relaxed max-w-2xl mb-8 italic">
+                &ldquo;{testimonial.text}&rdquo;
+              </p>
+              <div>
+                <p className="font-semibold text-white">{testimonial.name}</p>
+                <p className="text-sm text-gray-500">{testimonial.role}</p>
+              </div>
+              <div className="flex gap-2 mt-6">
+                {TESTIMONIALS.map((_, i) => (
+                  <button key={i} onClick={() => setTestimonialIdx(i)}
+                    className={`w-2 h-2 rounded-full transition-all ${i === testimonialIdx ? 'bg-purple-400 w-6' : 'bg-white/20'}`} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Features Grid ─────────────────────────── */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-white/5">
         <div className="text-center mb-14">
@@ -384,9 +418,9 @@ export default function Home() {
       <section id="pricing" className="border-t border-white/5 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-4">
-            <span className="inline-block bg-purple-500/10 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-purple-500/20">Launch Week Pricing</span>
+            <span className="inline-block bg-purple-500/10 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-purple-500/20">Launch Week — Last Day</span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Start free. Upgrade when ready.</h2>
-            <p className="text-gray-500 mb-2">No contracts. Cancel anytime. Prices go up after July 14.</p>
+            <p className="text-gray-500 mb-2">Today is the last day of launch pricing. Locks in at $9/mo forever.</p>
           </div>
           <div className="flex justify-center gap-3 mb-10 text-xs text-gray-500 flex-wrap">
             <span className="flex items-center gap-1"><CheckCircle size={12} className="text-green-500" /> Cancel anytime</span>
