@@ -2,14 +2,14 @@
  * 博客文章生成器
  * OpenRouter primary → SiliconFlow fallback
  */
-import { BLOG_GENERATION_PROMPT } from "./prompts";
+import { BLOG_SYSTEM_PROMPT, BLOG_USER_PROMPT } from "./prompts";
 
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const SF_KEY = process.env.SILICONFLOW_API_KEY || "";
 const SF_URL = "https://api.siliconflow.cn/v1/chat/completions";
 
-const PRIMARY_MODEL = "openai/gpt-4o-mini";
+const PRIMARY_MODEL = "openai/gpt-4o";
 const FALLBACK_MODEL = "deepseek-ai/DeepSeek-V3";
 
 interface BlogRequest {
@@ -52,7 +52,7 @@ function parseBlogOutput(raw: string): {
   };
 }
 
-async function callAI(prompt: string): Promise<string> {
+async function callAI(systemPrompt: string, userPrompt: string): Promise<string> {
   // Try OpenRouter first
   let res = await fetch(OPENROUTER_URL, {
     method: "POST",
@@ -64,9 +64,12 @@ async function callAI(prompt: string): Promise<string> {
     },
     body: JSON.stringify({
       model: PRIMARY_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 3000,
-      temperature: 0.7,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
     }),
   });
 
@@ -83,9 +86,12 @@ async function callAI(prompt: string): Promise<string> {
       },
       body: JSON.stringify({
         model: FALLBACK_MODEL,
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
         max_tokens: 4096,
-        temperature: 0.7,
+        temperature: 0.3,
       }),
     });
 
@@ -175,7 +181,7 @@ export interface StreamEvent {
 export async function* streamBlogPost(
   request: BlogRequest
 ): AsyncGenerator<StreamEvent> {
-  const prompt = BLOG_GENERATION_PROMPT
+  const userPrompt = BLOG_USER_PROMPT
     .replace("{{TOPIC}}", request.topic)
     .replace("{{KEYWORD}}", request.keyword)
     .replace("{{SECONDARY_KEYWORDS}}", request.secondaryKeywords.join(", ") || "none")
@@ -192,9 +198,12 @@ export async function* streamBlogPost(
     },
     body: JSON.stringify({
       model: PRIMARY_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 3000,
-      temperature: 0.7,
+      messages: [
+        { role: "system", content: BLOG_SYSTEM_PROMPT },
+        { role: "user", content: userPrompt },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
       stream: true,
     }),
   });
@@ -212,9 +221,12 @@ export async function* streamBlogPost(
       },
       body: JSON.stringify({
         model: FALLBACK_MODEL,
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          { role: "system", content: BLOG_SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+        ],
         max_tokens: 4096,
-        temperature: 0.7,
+        temperature: 0.3,
       }),
     });
 
@@ -320,14 +332,14 @@ export async function* streamBlogPost(
 export async function generateBlogPost(
   request: BlogRequest
 ): Promise<BlogResult> {
-  const prompt = BLOG_GENERATION_PROMPT
+  const userPrompt = BLOG_USER_PROMPT
     .replace("{{TOPIC}}", request.topic)
     .replace("{{KEYWORD}}", request.keyword)
     .replace("{{SECONDARY_KEYWORDS}}", request.secondaryKeywords.join(", ") || "none")
     .replace("{{AUDIENCE}}", request.audience || "small business owners")
     .replace("{{TONE}}", request.tone || "professional and direct");
 
-  const rawOutput = await callAI(prompt);
+  const rawOutput = await callAI(BLOG_SYSTEM_PROMPT, userPrompt);
 
   if (!rawOutput || rawOutput.length < 200) {
     throw new Error("AI generation too short. Please try again.");
