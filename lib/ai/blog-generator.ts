@@ -39,11 +39,13 @@ function parseBlogOutput(raw: string): {
     .replace(/^SEO_TITLE:.*$/gm, "")
     .replace(/^SEO_DESC:.*$/gm, "")
     .replace(/^SLUG:.*$/gm, "")
-    .replace(/^KEYWORD_DENSITY:.*$/gm, "")
+    .replace(/^\*\*SEO_TITLE:.*$/gm, "")
+    .replace(/^\*\*SEO_DESC:.*$/gm, "")
+    .replace(/^\*\*SLUG:.*$/gm, "")
     .trim();
-  const seoTitleMatch = raw.match(/^SEO_TITLE:\s*(.+)$/m);
-  const seoDescMatch = raw.match(/^SEO_DESC:\s*(.+)$/m);
-  const slugMatch = raw.match(/^SLUG:\s*(.+)$/m);
+  const seoTitleMatch = raw.match(/^SEO_TITLE:\s*(.+)$/m) || raw.match(/^\*\*SEO_TITLE:\s*(.+)$/m);
+  const seoDescMatch = raw.match(/^SEO_DESC:\s*(.+)$/m) || raw.match(/^\*\*SEO_DESC:\s*(.+)$/m);
+  const slugMatch = raw.match(/^SLUG:\s*(.+)$/m) || raw.match(/^\*\*SLUG:\s*(.+)$/m);
   return {
     content,
     seoTitle: seoTitleMatch?.[1]?.trim() || "",

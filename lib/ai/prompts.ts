@@ -20,9 +20,9 @@ export const BLOG_USER_PROMPT = `Target keyword: {{KEYWORD}}
 Topic: {{TOPIC}}
 Audience: {{AUDIENCE}}
 
-Write a how-to guide with 5 sections. First sentence must be: "Most {{AUDIENCE}} make the same mistakes with {{TOPIC}}. Here is what actually works."
+Write a how-to guide with 5 H2 sections. Use ## for each section heading (not ###, not bold). First sentence must be: "Most {{AUDIENCE}} make the same mistakes with {{TOPIC}}. Here is what actually works."
 
-After the guide, output exactly:
+After the guide, output these three lines (plain text, no bold markers, no extra dashes):
 SEO_TITLE: (max 60 chars, include keyword, clickable)
 SEO_DESC: (140-160 chars, include keyword, clickable)
 SLUG: (url-friendly)`;
