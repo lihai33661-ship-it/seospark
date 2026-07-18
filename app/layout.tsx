@@ -3,9 +3,9 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SEO Spark — Free AI Blog Writer | Human-Like Articles in 60 Seconds | Get Found on Google",
+  title: "SEO Spark — Free AI Blog Writer | Articles That Rank on Google",
   description:
-    "AI blog writer that sounds human — not robotic. One keyword → publish-ready article in 60 seconds. LLM-powered, human-fine-tuned. ChatGPT writes words — we write premium content that ranks on Google. Free tier: 3 articles, no credit card.",
+    "AI blog writer that sounds human. One keyword → publish-ready article in 60 seconds. Built-in SEO scoring and EEAT signals. Free tier: 3 articles, no credit card.",
   keywords: [
     // AI / LLM 类
     "AI blog writer",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     "free SEO blog generator",
   ],
   openGraph: {
-    title: "SEO Spark — Free AI Blog Writer | Human-Like Articles in 60 Seconds",
+    title: "SEO Spark — Free AI Blog Writer | Articles That Rank",
     description:
       "LLM-powered blog writer that sounds human. One keyword → publish-ready article with built-in SEO scoring. 3 free articles.",
     url: "https://seospark.net",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SEO Spark — AI Blog Writer | Human-Like, 60 Seconds, Ranks on Google",
+    title: "SEO Spark — Free AI Blog Writer | Ranks on Google",
     description:
       "AI that writes like a human. One keyword → publish-ready article. LLM-powered, human-fine-tuned. 3 free articles.",
     images: ["https://seospark.net/opengraph-image"],
