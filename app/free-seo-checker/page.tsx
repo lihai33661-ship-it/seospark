@@ -105,9 +105,14 @@ export default function FreeSEOChecker() {
             <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-purple-500/20 rounded-2xl p-6 text-center">
               <h3 className="font-semibold text-lg mb-2">Want better scores automatically?</h3>
               <p className="text-sm text-gray-400 mb-4">{result.recommendation}</p>
-              <a href="/dashboard" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-400 hover:to-purple-400 transition-all">
-                Try SEO Spark Free <ArrowRight size={18} />
-              </a>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="/dashboard" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-400 hover:to-purple-400 transition-all">
+                  Try SEO Spark Free <ArrowRight size={18} />
+                </a>
+                <a href="/blog/free-seo-audit-small-business" className="inline-flex items-center gap-2 text-gray-400 hover:text-white px-4 py-3 text-sm transition-all">
+                  Read the SEO audit guide →
+                </a>
+              </div>
               <p className="text-xs text-gray-500 mt-3">3 free articles. No credit card. 60 seconds each.</p>
             </div>
           </div>
